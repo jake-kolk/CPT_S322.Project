@@ -1,6 +1,5 @@
 QT       += core gui
-QT       += core
-QT       += core network
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++17
@@ -11,15 +10,10 @@ CONFIG += c++17
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp \
-    recipe.cpp \
-    recipesearch.cpp
+    mainwindow.cpp
 
 HEADERS += \
-    mainwindow.h \
-    recipe.h \
-    recipesearch.h \
-    search.h
+    mainwindow.h
 
 FORMS += \
     mainwindow.ui
