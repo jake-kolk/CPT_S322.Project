@@ -8,7 +8,7 @@ void recipe::printRecipeToDebug()
     qDebug() << "Servings made: " << this->servings;
     qDebug() << "Calories per serving: " << this->calories;
     qDebug() << "Ingredient list: \n";
-    std::vector<recpieIngredientStruct*> v = *(this->ingredients);
+    std::vector<recipeIngredientStruct*> v = *(this->ingredients);
     for(unsigned long long i = 0; i < this->ingredients->size(); i++)
         qDebug() << v[i]->amount << v[i]->units<< v[i]->ingredient;
     qDebug() << "}";
