@@ -16,14 +16,15 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_searchButton_clicked()
 {
+    qDebug() << "Search Button Clicked";
     QString search = ui->recipeSearchbox->text();
-    if (search.isEmpty()) return;
+    //if (search.isEmpty()) return;
 
     QString apiKey = "KEY";  //this will be loaded from a local .json file to aviod key being exposed in source
     recipeSearch searchEngine(apiKey);
 
-    std::vector<QString> ingredients = {search};  // search by ingredient
-    std::vector<recipe*>* results = searchEngine.makeRequest("", ingredients, "", "", 5);
+    std::vector<QString> ingredients = {"flour", "cheese"};  // search by ingredient, temp stuff in the now for proof of concept
+    std::vector<recipe*>* results = searchEngine.makeRequest("Italian", ingredients, "", "", 5);
 
     ui->searchResult->clear();
     for (recipe* r : *results)
@@ -31,9 +32,14 @@ void MainWindow::on_searchButton_clicked()
         QListWidgetItem* item = new QListWidgetItem(r->title, ui->searchResult);
         item->setData(Qt::UserRole, QVariant::fromValue(r));  // store recipe pointer
     }
+
+    this->foundRecipes = results;
 }
 
+void MainWindow::on_item_clicked()
+{
 
+}
 
 void MainWindow::on_addGrocery_clicked()
 {
@@ -130,4 +136,36 @@ void MainWindow::on_deleteRecipeButton_clicked()
 
 
 
+
+
+void MainWindow::on_searchResult_itemClicked(QListWidgetItem *item)
+{
+    QString selectedRecipeTitle = item->text();
+
+    //this is probably not the best way to do it, if you know a better way please change
+    for(unsigned long i = 0; i < foundRecipes->size(); i++)
+    {
+        if(selectedRecipeTitle == (*foundRecipes)[i]->title)
+        {
+            selectedRecipe = (*foundRecipes)[i];
+            break;
+        }
+    }
+
+    if(this->selectedRecipe == nullptr) return;
+    QString recipeSummary = "Servings: " + QString::number(this->selectedRecipe->servings);
+    recipeSummary.append("\nCalories per serving: " + QString::number(this->selectedRecipe->calories));
+    recipeSummary.append("\n\n" + this->selectedRecipe->description);
+    recipeSummary.append("\n\nIngredeints: \n");
+    for(unsigned long i = 0; i < this->selectedRecipe->ingredients->size(); i++)
+    {
+        recipeSummary.append(QString::number((*this->selectedRecipe->ingredients)[i]->amount) +" ");
+        recipeSummary.append((*this->selectedRecipe->ingredients)[i]->units + " ");
+        recipeSummary.append((*this->selectedRecipe->ingredients)[i]->ingredient + "\n");
+    }
+    recipeSummary.append("\nURL: " + this->selectedRecipe->recipeURL.toString());
+    this->ui->recipeName->setText(selectedRecipeTitle);
+    this->ui->recipeDesc->setText(recipeSummary);
+
+}
 

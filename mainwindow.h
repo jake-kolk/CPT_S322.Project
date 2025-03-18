@@ -55,9 +55,14 @@ private slots:
 
     void on_deleteRecipeButton_clicked();
 
+    void on_item_clicked();
+
+    void on_searchResult_itemClicked(QListWidgetItem *item);
+
 private:
     Ui::MainWindow *ui;
     recipe* selectedRecipe = nullptr;
+    std::vector<recipe*>* foundRecipes = nullptr;
 };
 MAINWINDOW_H
 #endif
