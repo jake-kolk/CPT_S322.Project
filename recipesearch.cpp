@@ -99,8 +99,8 @@ std::vector<recipe*>* recipeSearch::handleResponse(QNetworkReply* reply) {
                 qDebug() << "Image URL: " << imageURL;
                 qDebug() << "Decription: " << description;
 
-                std::vector<recipe::recpieIngredientStruct*>* ingredeintVector = new std::vector<recipe::recpieIngredientStruct*>;
-                recipe::recpieIngredientStruct* is;
+                std::vector<recipe::recipeIngredientStruct*>* ingredeintVector = new std::vector<recipe::recipeIngredientStruct*>;
+                recipe::recipeIngredientStruct* is;
                 QJsonObject nutritionObj = recipeObj["nutrition"].toObject();
 
                 QJsonArray nutrientsArray = nutritionObj["nutrients"].toArray();
@@ -114,7 +114,7 @@ std::vector<recipe*>* recipeSearch::handleResponse(QNetworkReply* reply) {
                 qDebug() << "Ingredients:";
                 for (const QJsonValue &ingredientVal : ingredientsArray) {
                     QJsonObject ingredientObj = ingredientVal.toObject();
-                    is = new recipe::recpieIngredientStruct;
+                    is = new recipe::recipeIngredientStruct;
 
                     QString name = ingredientObj["name"].toString();
                     is->ingredient = name;
