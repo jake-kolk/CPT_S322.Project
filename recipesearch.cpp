@@ -74,6 +74,8 @@ std::vector<recipe*>* recipeSearch::handleResponse(QNetworkReply* reply) {
         return recipes;
     }
 
+    qDebug() << "Raw Response Data: " << responseData;
+
     QJsonObject jsonObject = jsonResponse.object();
     if (jsonObject.contains("results")) {
         QJsonArray results = jsonObject["results"].toArray();
@@ -131,7 +133,7 @@ std::vector<recipe*>* recipeSearch::handleResponse(QNetworkReply* reply) {
                 // Create new recipe object and store in the vector
                 //(int id, QUrl inRecipeURL, QString inTitle, std::vector<recpieIngredientStruct*>* inIngredients,
                 //int inServings, double inCalories, QUrl inImageURL, QString inDescription
-                recipe* newRecipe = new recipe(recipeID, recipeURL, title, ingredeintVector,
+                recipe* newRecipe = new recipe(recipeID, recipeURL, title.replace("-", " "), ingredeintVector,
                                                 servings, calories, imageURL, description);
                 recipes->push_back(newRecipe);
             }

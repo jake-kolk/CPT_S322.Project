@@ -98,45 +98,6 @@
          <number>0</number>
         </property>
        </widget>
-       <widget class="QLabel" name="recipeName">
-        <property name="geometry">
-         <rect>
-          <x>200</x>
-          <y>70</y>
-          <width>371</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <family>Calibri</family>
-          <pointsize>16</pointsize>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="text">
-         <string>[Recipe Name]</string>
-        </property>
-       </widget>
-       <widget class="QLineEdit" name="recipeDesc">
-        <property name="geometry">
-         <rect>
-          <x>200</x>
-          <y>110</y>
-          <width>471</width>
-          <height>211</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <family>Calibri</family>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
        <widget class="QPushButton" name="saveRecipeButton">
         <property name="geometry">
          <rect>
@@ -148,6 +109,26 @@
         </property>
         <property name="text">
          <string>Save Recipe</string>
+        </property>
+       </widget>
+       <widget class="QTextEdit" name="recipeDesc">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>110</y>
+          <width>471</width>
+          <height>211</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="recipeName">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>60</y>
+          <width>371</width>
+          <height>41</height>
+         </rect>
         </property>
        </widget>
       </widget>
