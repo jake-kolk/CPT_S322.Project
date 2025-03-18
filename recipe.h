@@ -1,19 +1,13 @@
-/**
- * @file        recipe.h
- * @brief       define recipe class attributes and behavior
- * @author      Jacob Kolk
- * @date        2025-3-7
- */
-
 #ifndef RECIPE_H
 #define RECIPE_H
 #include <QString>
 #include <QUrl>
 #include <QDebug>
+
 class recipe
 {
 public:
-    struct recpieIngredientStruct{
+    struct recipeIngredientStruct{
         double amount;
         QString units;
         QString ingredient;
@@ -21,13 +15,13 @@ public:
     int recipeID;
     QUrl recipeURL;
     QString title;
-    std::vector<recpieIngredientStruct*>* ingredients;
+    std::vector<recipeIngredientStruct*>* ingredients;
     int servings;
     double calories;
     QUrl imageURL;
     QString description;
 
-    recipe(int id, QUrl inRecipeURL, QString inTitle, std::vector<recpieIngredientStruct*>* inIngredients,
+    recipe(int id, QUrl inRecipeURL, QString inTitle, std::vector<recipeIngredientStruct*>* inIngredients,
            int inServings, double inCalories, QUrl inImageURL, QString inDescription)
     {
         this->recipeID = id;
@@ -42,5 +36,8 @@ public:
     void printRecipeToDebug();
 
 };
+
 #endif // RECIPE_H
+
+
 
