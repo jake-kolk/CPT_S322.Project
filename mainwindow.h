@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+//#define JSONFILEPATH
 #include <QMainWindow>
 #include <QListWidgetItem>
 #include <QString>
@@ -12,7 +13,11 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QFile>
+#include <QIODevice>
 #include <QDebug>
+#include <QCloseEvent>
+#include <QFileInfo>
 #include "recipe.h"
 
 QT_BEGIN_NAMESPACE
@@ -28,6 +33,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void loadDataFromJson(QString filepath);//filepath should be "" unless user tried to load from non default filepath
 
 private slots:
 
@@ -63,6 +69,12 @@ private:
     Ui::MainWindow *ui;
     recipe* selectedRecipe = nullptr;
     std::vector<recipe*>* foundRecipes = nullptr;
+    std::vector<recipe*>* savedRecipes = nullptr;
+    QString user;
+    QString APIKEY;
+    void saveDatatoJson();
+protected:
+    void closeEvent(QCloseEvent *event) override;
 };
 MAINWINDOW_H
 #endif
