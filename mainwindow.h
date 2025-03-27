@@ -18,6 +18,7 @@
 #include <QDebug>
 #include <QCloseEvent>
 #include <QFileInfo>
+
 #include "recipe.h"
 
 QT_BEGIN_NAMESPACE
@@ -65,16 +66,21 @@ private slots:
 
     void on_searchResult_itemClicked(QListWidgetItem *item);
 
+    void on_addAPIKeyButton_triggered();
+
+
 private:
     Ui::MainWindow *ui;
     recipe* selectedRecipe = nullptr;
     std::vector<recipe*>* foundRecipes = nullptr;
+
     std::vector<recipe*>* savedRecipes = nullptr;
     QString user;
     QString APIKEY;
     void saveDatatoJson();
 protected:
     void closeEvent(QCloseEvent *event) override;
+
 };
 MAINWINDOW_H
 #endif
