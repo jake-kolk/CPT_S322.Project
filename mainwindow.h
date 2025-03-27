@@ -3,6 +3,17 @@
 
 #include <QMainWindow>
 #include <QListWidgetItem>
+#include <QString>
+#include <QtNetwork/qnetworkaccessmanager.h>
+#include <QCoreApplication>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QDebug>
+#include "recipe.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -44,7 +55,18 @@ private slots:
 
     void on_deleteRecipeButton_clicked();
 
+    void on_item_clicked();
+
+    void on_searchResult_itemClicked(QListWidgetItem *item);
+
+    void on_addAPIKeyButton_triggered();
+
 private:
     Ui::MainWindow *ui;
+    recipe* selectedRecipe = nullptr;
+    std::vector<recipe*>* foundRecipes = nullptr;
 };
-#endif // MAINWINDOW_H
+MAINWINDOW_H
+#endif
+
+
