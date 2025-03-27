@@ -1,3 +1,4 @@
+
 #ifndef RECIPE_H
 #define RECIPE_H
 #include <QString>
@@ -38,6 +39,5 @@ public:
 };
 
 #endif // RECIPE_H
-
 
 

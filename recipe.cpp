@@ -1,3 +1,4 @@
+
 #include "recipe.h"
 void recipe::printRecipeToDebug()
 {
@@ -13,3 +14,4 @@ void recipe::printRecipeToDebug()
         qDebug() << v[i]->amount << v[i]->units<< v[i]->ingredient;
     qDebug() << "}";
 }
+
