@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "recipesearch.h"
+#include "addapikeydialog.h"
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -8,7 +9,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     qDebug() << "Loading json data...\n";
     loadDataFromJson(QString("")); // QString("") means default location
-    this->APIKEY = "1774c84e2269496eb5a1c180961918fa";
     this->savedRecipes = new std::vector<recipe*>;
 
 
@@ -197,6 +197,10 @@ void MainWindow::on_searchResult_itemClicked(QListWidgetItem *item)
 
 void MainWindow::on_addAPIKeyButton_triggered()
 {
+    addAPIKeyDialog w(this);
+    w.exec();
+    this->APIKEY = w.getAPIKey();
+    qDebug() << "API key is now: " << this->APIKEY;
 
 
 }

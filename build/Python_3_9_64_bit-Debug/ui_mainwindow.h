@@ -261,7 +261,7 @@ public:
         scrollArea->setWidgetResizable(true);
         scrollAreaWidgetContents = new QWidget();
         scrollAreaWidgetContents->setObjectName("scrollAreaWidgetContents");
-        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 434, 499));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 443, 499));
         QSizePolicy sizePolicy5(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Expanding);
         sizePolicy5.setHorizontalStretch(3);
         sizePolicy5.setVerticalStretch(0);
@@ -497,7 +497,7 @@ public:
         scrollArea_2->setWidgetResizable(true);
         scrollAreaWidgetContents_3 = new QWidget();
         scrollAreaWidgetContents_3->setObjectName("scrollAreaWidgetContents_3");
-        scrollAreaWidgetContents_3->setGeometry(QRect(0, 0, 439, 499));
+        scrollAreaWidgetContents_3->setGeometry(QRect(0, 0, 448, 499));
         sizePolicy5.setHeightForWidth(scrollAreaWidgetContents_3->sizePolicy().hasHeightForWidth());
         scrollAreaWidgetContents_3->setSizePolicy(sizePolicy5);
         verticalLayout_9 = new QVBoxLayout(scrollAreaWidgetContents_3);

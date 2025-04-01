@@ -111,7 +111,9 @@ std::vector<recipe*>* recipeSearch::handleResponse(QNetworkReply* reply) {
                 double calories = caloriesObj["amount"].toDouble();
                 qDebug() << "Calories: " << calories;
 
-                QJsonArray ingredientsArray = nutritionObj["ingredients"].toArray();
+                QJsonArray ingredientsArray = nutritionObj["ingredients"].toArray();\
+
+                QString unit;
 
                 // Iterate over ingredients
                 qDebug() << "Ingredients:";
@@ -120,13 +122,20 @@ std::vector<recipe*>* recipeSearch::handleResponse(QNetworkReply* reply) {
                     is = new recipe::recipeIngredientStruct;
 
                     QString name = ingredientObj["name"].toString();
-                    is->ingredient = name;
+                    if(name.mid(0,3) == "tsp")// API has error in their DB, tsp is included in name, this fixes it
+                    {
+                        unit = name.mid(0,3);
+                        name.remove(0,4);
+                        is->ingredient = name;
+                        is->units = unit;
+                    }else{
+                        is->ingredient = name;
+                        QString unit = ingredientObj["unit"].toString();
+                        is->units = unit;
+                    }
 
                     double amount = ingredientObj["amount"].toDouble();
                     is->amount = amount;
-
-                    QString unit = ingredientObj["unit"].toString();
-                    is->units = unit;
 
                     ingredeintVector->push_back(is);
                     qDebug() << "Ingredient:" << name << "- Amount:" << amount << unit;
