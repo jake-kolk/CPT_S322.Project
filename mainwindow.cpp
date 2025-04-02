@@ -127,24 +127,17 @@ void MainWindow::on_mealPlanNewButton_clicked()
 
 void MainWindow::on_saveRecipeButton_clicked()
 {
-<<<<<<< Updated upstream
-    if (selectedRecipe)
-    {
-        QListWidgetItem* item = new QListWidgetItem(selectedRecipe->title, ui->savedRecipesList);
-        item->setData(Qt::UserRole, QVariant::fromValue(selectedRecipe));
-    }
-    this->savedRecipes->push_back(selectedRecipe);
-=======
+
     if(this->selectedRecipe == nullptr)return;
     this->savedRecipes->push_back(selectedRecipe);
     addSavedRecipesToList();
->>>>>>> Stashed changes
 }
 
 
 
-
 <<<<<<< Updated upstream
+=======
+
 void MainWindow::on_savedRecipeList_itemActivated(QListWidgetItem *item)
 {
     QVariant data = item->data(Qt::UserRole);
@@ -193,9 +186,8 @@ void MainWindow::on_savedRecipeList_itemActivated(QListWidgetItem *item)
 
 }
 
-=======
->>>>>>> Stashed changes
 
+>>>>>>> Stashed changes
 void MainWindow::on_deleteRecipeButton_clicked()
 {
 
