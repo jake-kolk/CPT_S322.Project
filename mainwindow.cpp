@@ -135,6 +135,59 @@ void MainWindow::on_saveRecipeButton_clicked()
 
 
 
+<<<<<<< Updated upstream
+=======
+
+void MainWindow::on_savedRecipeList_itemActivated(QListWidgetItem *item)
+{
+    QVariant data = item->data(Qt::UserRole);
+    selectedRecipe = data.value<recipe*>();  // store selected recipe
+
+    if (selectedRecipe)
+    {
+        ui->savedRecipeName->setText(selectedRecipe->title);
+        ui->savedRecipeDesc->setText(selectedRecipe->description);
+
+        // testing
+        ui->savedRecipeURL->setText(selectedRecipe->recipeURL.toString());
+        ui->savedRecipeServings->setText(QString::number(selectedRecipe->servings));
+        ui->savedRecipeCalPerSevings->setText(QString::number(selectedRecipe->calories));
+
+        //ui->recipeImage->scene()->clear();
+        QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+        QUrl imageUrl(selectedRecipe->imageURL.toString());
+
+        QNetworkReply *reply = manager->get(QNetworkRequest(imageUrl));
+        connect(reply, &QNetworkReply::finished, [=]() {
+            if (reply->error() == QNetworkReply::NoError) {
+                QPixmap pixmap;
+                pixmap.loadFromData(reply->readAll());
+
+                QGraphicsScene *scene = new QGraphicsScene(this);
+                scene->addPixmap(pixmap);
+
+                ui->savedRecipeImage->setScene(scene);
+                ui->savedRecipeImage->fitInView(scene->itemsBoundingRect(), Qt::KeepAspectRatio);
+            } else {
+                qDebug() << "Failed to load image:" << reply->errorString();
+            }
+            reply->deleteLater();
+        });
+        ui->savedRecipeIngredientTable->setRowCount(0); //reset table
+        for (auto* ingredient : *(selectedRecipe->ingredients)) {
+            int row = ui->recipeIngredientTable->rowCount();
+            ui->recipeIngredientTable->insertRow(row);
+
+            ui->savedRecipeIngredientTable->setItem(row, 0, new QTableWidgetItem(QString::number(ingredient->amount)));
+            ui->savedRecipeIngredientTable->setItem(row, 1, new QTableWidgetItem(ingredient->units));
+            ui->savedRecipeIngredientTable->setItem(row, 2, new QTableWidgetItem(ingredient->ingredient));
+        }
+    }
+
+}
+
+
+>>>>>>> Stashed changes
 void MainWindow::on_deleteRecipeButton_clicked()
 {
 
