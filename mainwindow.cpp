@@ -2,6 +2,10 @@
 #include "ui_mainwindow.h"
 #include "recipesearch.h"
 #include "addapikeydialog.h"
+#include "mealplan.h"
+#include "newmealplandialog.h"
+#include <QMessageBox>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -73,9 +77,22 @@ void MainWindow::on_removeMealPlan_clicked()
 }
 
 
-void MainWindow::on_addMealPlan_clicked()
+void MainWindow::on_mealPlanNewButton_clicked()
 {
+    NewMealPlanDialog dialog(this);
+    if (dialog.exec() == QDialog::Accepted) {
+        QString name = dialog.getName();
+        QDate startDate = dialog.getStartDate();
+        QDate endDate = dialog.getEndDate();
 
+        if (!name.isEmpty()) {
+            MealPlan plan(name, startDate, endDate);
+            mealPlans.push_back(plan);
+            ui->mealPlanSelect->addItem(name);
+        } else {
+            QMessageBox::warning(this, "Empty Name", "Please enter a meal plan name.");
+        }
+    }
 }
 
 
@@ -145,12 +162,47 @@ void MainWindow::on_saveRecipeButton_clicked()
 void MainWindow::on_savedRecipeList_itemActivated(QListWidgetItem *item)
 {
     QVariant data = item->data(Qt::UserRole);
-    recipe* savedRecipe = data.value<recipe*>();  // rSetrieve stored recipe
+    selectedRecipe = data.value<recipe*>();  // store selected recipe
 
-    if (savedRecipe)
+    if (selectedRecipe)
     {
-        ui->savedRecipeName->setText(savedRecipe->title);
-        ui->savedRecipeDesc->setText(savedRecipe->description);
+        ui->savedRecipeName->setText(selectedRecipe->title);
+        ui->savedRecipeDesc->setText(selectedRecipe->description);
+
+        // testing
+        ui->savedRecipeURL->setText(selectedRecipe->recipeURL.toString());
+        ui->savedRecipeServings->setText(QString::number(selectedRecipe->servings));
+        ui->savedRecipeCalPerSevings->setText(QString::number(selectedRecipe->calories));
+
+        //ui->recipeImage->scene()->clear();
+        QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+        QUrl imageUrl(selectedRecipe->imageURL.toString());
+
+        QNetworkReply *reply = manager->get(QNetworkRequest(imageUrl));
+        connect(reply, &QNetworkReply::finished, [=]() {
+            if (reply->error() == QNetworkReply::NoError) {
+                QPixmap pixmap;
+                pixmap.loadFromData(reply->readAll());
+
+                QGraphicsScene *scene = new QGraphicsScene(this);
+                scene->addPixmap(pixmap);
+
+                ui->savedRecipeImage->setScene(scene);
+                ui->savedRecipeImage->fitInView(scene->itemsBoundingRect(), Qt::KeepAspectRatio);
+            } else {
+                qDebug() << "Failed to load image:" << reply->errorString();
+            }
+            reply->deleteLater();
+        });
+        ui->savedRecipeIngredientTable->setRowCount(0); //reset table
+        for (auto* ingredient : *(selectedRecipe->ingredients)) {
+            int row = ui->recipeIngredientTable->rowCount();
+            ui->recipeIngredientTable->insertRow(row);
+
+            ui->savedRecipeIngredientTable->setItem(row, 0, new QTableWidgetItem(QString::number(ingredient->amount)));
+            ui->savedRecipeIngredientTable->setItem(row, 1, new QTableWidgetItem(ingredient->units));
+            ui->savedRecipeIngredientTable->setItem(row, 2, new QTableWidgetItem(ingredient->ingredient));
+        }
     }
 }
 

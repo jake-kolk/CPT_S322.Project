@@ -13,19 +13,24 @@ SOURCES += \
     addapikeydialog.cpp \
     main.cpp \
     mainwindow.cpp \
+    mealplan.cpp \
+    newmealplandialog.cpp \
     recipe.cpp \
     recipesearch.cpp
 
 HEADERS += \
     addapikeydialog.h \
     mainwindow.h \
+    mealplan.h \
+    newmealplandialog.h \
     recipe.h \
     recipesearch.h \
     search.h
 
 FORMS += \
     addapikeydialog.ui \
-    mainwindow.ui
+    mainwindow.ui \
+    newmealplandialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

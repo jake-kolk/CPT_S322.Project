@@ -20,6 +20,7 @@
 #include <QFileInfo>
 
 #include "recipe.h"
+#include "mealplan.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -44,7 +45,7 @@ private slots:
 
     void on_removeMealPlan_clicked();
 
-    void on_addMealPlan_clicked();
+    //void on_addMealPlan_clicked();
 
     void on_mealPlanSelect_currentIndexChanged(int index);
 
@@ -68,6 +69,8 @@ private slots:
 
     void on_addAPIKeyButton_triggered();
 
+    void on_mealPlanNewButton_clicked();
+
 
 private:
     Ui::MainWindow *ui;
@@ -78,6 +81,8 @@ private:
     QString user;
     QString APIKEY;
     void saveDatatoJson();
+
+    std::vector<MealPlan> mealPlans;
 protected:
     void closeEvent(QCloseEvent *event) override;
 
