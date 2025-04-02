@@ -15,3 +15,8 @@ void recipe::printRecipeToDebug()
     qDebug() << "}";
 }
 
+recipe* recipe::createClone()
+{
+    recipe* clone = new recipe(this->recipeID, this->recipeURL, this->title, this->ingredients,this->servings, this->calories, this->imageURL, this->description);
+    return clone;
+}

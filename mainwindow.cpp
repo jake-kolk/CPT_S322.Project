@@ -12,8 +12,22 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     qDebug() << "Loading json data...\n";
-    loadDataFromJson(QString("")); // QString("") means default location
     this->savedRecipes = new std::vector<recipe*>;
+    loadDataFromJson(QString("")); // QString("") means default location
+    addSavedRecipesToList();
+
+    //set combox box option for search filters
+    QStringList cuisines =     {"All Cuisines", "African", "Asian", "American", "British", "Cajun", "Caribbean", "Chinese", "Eastern European", "European",
+     "French",  "German", "Greek", "Indian", "Irish", "Italian", "Japanese", "Jewish", "Korean", "Latin American", "Mediterranean",
+                            "Mexican", "Middle Eastern", "Nordic", "Southern", "Spanish", "Thai", "Vietnamese"};
+    QStringList diets = {"All diets", "Gluten Free", "Ketogenic", "Vegetarian", "Lacto-Vegetarian", "Ovo-Vegetarian", "Vegan", "Pescetarian", "Paleo", "Primal",
+                     "Low FODMAP", "Whole30"};
+    QStringList types = {"All meal Types", "main course","side dis", "dessert", "appetizer", "salad", "bread", "breakfast", "soup", "beverage", "sauce",
+                         "marinade", "fingerfood", "snack", "drink"};
+    this->ui->cuisineComboBox->addItems(cuisines);
+    this->ui->dietComboBox->addItems(diets);
+    this->ui->mealTypeComboBox->addItems(types);
+
 
 
 
@@ -29,23 +43,39 @@ void MainWindow::on_searchButton_clicked()
 {
     qDebug() << "Search Button Clicked";
     QString search = ui->recipeSearchbox->text();
-    //if (search.isEmpty()) return;
-
-
-
     recipeSearch searchEngine(this->APIKEY);
 
 
-    std::vector<QString> ingredients = {"flour", "cheese"};  // search by ingredient, temp stuff in the now for proof of concept
-    std::vector<recipe*>* results = searchEngine.makeRequest("Italian", ingredients, "", "", 5);
+    std::vector<QString> ingredients = {};  // search by ingredient, temp stuff in the now for proof of concept
 
-    ui->searchResult->clear();
+    QString cuisine = "";
+    QString mealType = "";
+    QString diet = "";
+    QString query = "";
+    if(this->ui->cuisineComboBox->currentText() != QString("All cuisines"))//check all combo boxed for their selection
+    {
+        cuisine = this->ui->cuisineComboBox->currentText();
+    }
+    if(this->ui->dietComboBox->currentText() != QString("All diets"))
+    {
+        diet = this->ui->dietComboBox->currentText();
+    }
+    if(this->ui->mealTypeComboBox->currentText() != QString("All meal types"))
+    {
+        mealType = this->ui->mealTypeComboBox->currentText();
+    }
+    if(this->ui->recipeSearchbox->text() != QString(""))
+    {
+        query = this->ui->recipeSearchbox->text();
+    }
+    std::vector<recipe*>* results = searchEngine.makeRequest(cuisine, ingredients, diet, mealType, 20, query);
+
+    ui->searchResult->clear();//update search list
     for (recipe* r : *results)
     {
         QListWidgetItem* item = new QListWidgetItem(r->title, ui->searchResult);
         item->setData(Qt::UserRole, QVariant::fromValue(r));  // store recipe pointer
     }
-
     this->foundRecipes = results;
 }
 
@@ -95,70 +125,26 @@ void MainWindow::on_mealPlanNewButton_clicked()
     }
 }
 
-
-
-
-
-void MainWindow::on_searchResult_itemActivated(QListWidgetItem *item)
-{
-    QVariant data = item->data(Qt::UserRole);
-    selectedRecipe = data.value<recipe*>();  // Store selected recipe
-
-    if (selectedRecipe)
-    {
-        ui->recipeName->setText(selectedRecipe->title);
-        ui->recipeDesc->setText(selectedRecipe->description);
-
-        // testing
-        ui->recipeURL->setText(selectedRecipe->recipeURL.toString());
-        ui->recipeServings->setText(QString::number(selectedRecipe->servings));
-        ui->recipeCalPerSevings->setText(QString::number(selectedRecipe->calories));
-
-        //ui->recipeImage->scene()->clear();
-        QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-        QUrl imageUrl(selectedRecipe->imageURL.toString());
-
-        QNetworkReply *reply = manager->get(QNetworkRequest(imageUrl));
-        connect(reply, &QNetworkReply::finished, [=]() {
-            if (reply->error() == QNetworkReply::NoError) {
-                QPixmap pixmap;
-                pixmap.loadFromData(reply->readAll());
-
-                QGraphicsScene *scene = new QGraphicsScene(this);
-                scene->addPixmap(pixmap);
-
-                ui->recipeImage->setScene(scene);
-                ui->recipeImage->fitInView(scene->itemsBoundingRect(), Qt::KeepAspectRatio);
-            } else {
-                qDebug() << "Failed to load image:" << reply->errorString();
-            }
-            reply->deleteLater();
-        });
-        ui->recipeIngredientTable->setRowCount(0); //reset table
-        for (auto* ingredient : *(selectedRecipe->ingredients)) {
-            int row = ui->recipeIngredientTable->rowCount();
-            ui->recipeIngredientTable->insertRow(row);
-
-            ui->recipeIngredientTable->setItem(row, 0, new QTableWidgetItem(QString::number(ingredient->amount)));
-            ui->recipeIngredientTable->setItem(row, 1, new QTableWidgetItem(ingredient->units));
-            ui->recipeIngredientTable->setItem(row, 2, new QTableWidgetItem(ingredient->ingredient));
-        }
-    }
-}
-
-
 void MainWindow::on_saveRecipeButton_clicked()
 {
+<<<<<<< Updated upstream
     if (selectedRecipe)
     {
         QListWidgetItem* item = new QListWidgetItem(selectedRecipe->title, ui->savedRecipesList);
         item->setData(Qt::UserRole, QVariant::fromValue(selectedRecipe));
     }
+    this->savedRecipes->push_back(selectedRecipe);
+=======
+    if(this->selectedRecipe == nullptr)return;
+    this->savedRecipes->push_back(selectedRecipe);
+    addSavedRecipesToList();
+>>>>>>> Stashed changes
 }
 
 
 
 
+<<<<<<< Updated upstream
 void MainWindow::on_savedRecipeList_itemActivated(QListWidgetItem *item)
 {
     QVariant data = item->data(Qt::UserRole);
@@ -204,48 +190,16 @@ void MainWindow::on_savedRecipeList_itemActivated(QListWidgetItem *item)
             ui->savedRecipeIngredientTable->setItem(row, 2, new QTableWidgetItem(ingredient->ingredient));
         }
     }
+
 }
 
+=======
+>>>>>>> Stashed changes
 
 void MainWindow::on_deleteRecipeButton_clicked()
 {
-}
-
-
-
-
-
-void MainWindow::on_searchResult_itemClicked(QListWidgetItem *item)
-{
-    QString selectedRecipeTitle = item->text();
-
-    //this is probably not the best way to do it, if you know a better way please change
-    for(unsigned long i = 0; i < foundRecipes->size(); i++)
-    {
-        if(selectedRecipeTitle == (*foundRecipes)[i]->title)
-        {
-            selectedRecipe = (*foundRecipes)[i];
-            break;
-        }
-    }
-
-    if(this->selectedRecipe == nullptr) return;
-    QString recipeSummary = "Servings: " + QString::number(this->selectedRecipe->servings);
-    recipeSummary.append("\nCalories per serving: " + QString::number(this->selectedRecipe->calories));
-    recipeSummary.append("\n\n" + this->selectedRecipe->description);
-    recipeSummary.append("\n\nIngredeints: \n");
-    for(unsigned long i = 0; i < this->selectedRecipe->ingredients->size(); i++)
-    {
-        recipeSummary.append(QString::number((*this->selectedRecipe->ingredients)[i]->amount) +" ");
-        recipeSummary.append((*this->selectedRecipe->ingredients)[i]->units + " ");
-        recipeSummary.append((*this->selectedRecipe->ingredients)[i]->ingredient + "\n");
-    }
-    recipeSummary.append("\nURL: " + this->selectedRecipe->recipeURL.toString());
-    this->ui->recipeName->setText(selectedRecipeTitle);
-    this->ui->recipeDesc->setText(recipeSummary);
 
 }
-
 
 void MainWindow::on_addAPIKeyButton_triggered()
 {
@@ -269,13 +223,6 @@ void MainWindow::on_recipeSearchbox_returnPressed()
 {
     on_searchButton_clicked();
 }
-
-
-
-
-
-
-
 
 
 void MainWindow::loadDataFromJson(QString filepath)
@@ -327,13 +274,13 @@ void MainWindow::loadDataFromJson(QString filepath)
             QString recipeURL = recipeObj["recipeURL"].toString();
             int recipeID = recipeObj["recipeID"].toInt();
 
-            qDebug() << "\nRecipe Title:" << title;
-            qDebug() << "Servings:" << servings;
-            qDebug() << "Calories:" << calories;
-            qDebug() << "Description:" << description;
-            qDebug() << "Image URL:" << imageURL;
-            qDebug() << "Recipe URL:" << recipeURL;
-            qDebug() << "Recipe ID:" << recipeID;
+            //qDebug() << "\nRecipe Title:" << title;
+            //qDebug() << "Servings:" << servings;
+            //qDebug() << "Calories:" << calories;
+            //qDebug() << "Description:" << description;
+            //qDebug() << "Image URL:" << imageURL;
+            //qDebug() << "Recipe URL:" << recipeURL;
+            //qDebug() << "Recipe ID:" << recipeID;
 
             // Extract Ingredients
             if (recipeObj.contains("ingredients") && recipeObj["ingredients"].isArray()) {
@@ -341,7 +288,7 @@ void MainWindow::loadDataFromJson(QString filepath)
 
                 ingredientVector = new std::vector<recipe::recipeIngredientStruct*>;
 
-                qDebug() << "Ingredients:";
+                //qDebug() << "Ingredients:";
                 for (const QJsonValue &ingredientValue : ingredientsArray) {
                     if (!ingredientValue.isObject()) continue;
                     QJsonObject ingredientObj = ingredientValue.toObject();
@@ -357,7 +304,7 @@ void MainWindow::loadDataFromJson(QString filepath)
                     QString unit = ingredientObj["unit"].toString();
                     ingredientStruct->units = unit;
 
-                    qDebug() << "  -" << ingredientName << ":" << quantity << unit;
+                    //qDebug() << "  -" << ingredientName << ":" << quantity << unit;
 
                     ingredientVector->push_back(ingredientStruct);
                 }
@@ -400,11 +347,27 @@ void MainWindow::saveDatatoJson()
                                                 {"name", (*(*currentRecipe->ingredients)[j]).ingredient }});
             }
             (*recipeOBJ)["ingredients"] = ingredients;
+            while(ingredients.count()) {//remove all elements fro next interation
+                ingredients.pop_back();
+            }
             recipes.append(*recipeOBJ);
         }
         savedData.append(recipes);
     }
-
+    MealPlan currentPlan;
+    QJsonArray mealPlans;
+    QJsonObject* mealPlanObj = new QJsonObject;
+    if(this->mealPlans.size())
+    {
+        for(unsigned long i = 0; i < mealPlans.size(); i++)
+        {
+            currentPlan = this->mealPlans[i];
+            (*mealPlanObj)["title"] = currentPlan.getName();
+            (*mealPlanObj)["startDate"] = currentPlan.getStartDate().toString();
+            (*mealPlanObj)["endDate"] = currentPlan.getEndDate().toString();
+            mealPlans.append(*mealPlanObj);
+        }
+    }
     QJsonDocument jsonDoc(savedData);
 
     QFile file("data.json");
@@ -420,9 +383,33 @@ void MainWindow::saveDatatoJson()
     qDebug() << "JSON file saved successfully at:" << QFileInfo(file).absoluteFilePath();
 
     delete recipeOBJ;
+    delete mealPlanObj;
 
 }
 
+void MainWindow::addSavedRecipesToList()
+{
+    ui->savedRecipesList->clear();
+    for (recipe* r : (*this->savedRecipes))
+    {
+        if(r == nullptr) return;
+        QListWidgetItem* item = new QListWidgetItem(r->title, ui->savedRecipesList);
+        item->setData(Qt::UserRole, QVariant::fromValue(r));  // store recipe pointer
+    }
+}
+
+void MainWindow::updateSavedRecipesListWithSearch(QString search)
+{
+    ui->savedRecipesList->clear();
+    for (recipe* r : (*this->savedRecipes))
+    {
+        if(r == nullptr) return;
+        if(r->title.toUpper().contains(search)){
+            QListWidgetItem* item = new QListWidgetItem(r->title, ui->savedRecipesList);
+            item->setData(Qt::UserRole, QVariant::fromValue(r));  // store recipe pointer
+        }
+    }
+}
 void MainWindow::closeEvent(QCloseEvent *event) {
 
     qDebug() << "MainWindow is closing! Performing cleanup...";
@@ -431,3 +418,199 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 
     event->accept();
 }
+
+void MainWindow::on_savedRecipesList_itemClicked(QListWidgetItem *item)
+{
+    QVariant data = item->data(Qt::UserRole);
+    selectedRecipe = data.value<recipe*>();  // Store selected recipe
+
+    if (selectedRecipe)
+    {
+        ui->savedRecipeName->setText(selectedRecipe->title);
+        ui->savedRecipeDesc->setText(selectedRecipe->description);
+
+        // testing
+        ui->savedRecipeURL->setText(selectedRecipe->recipeURL.toString());
+        ui->savedRecipeServings->setText(QString::number(selectedRecipe->servings));
+        ui->savedRecipeCalPerSevings->setText(QString::number(selectedRecipe->calories));
+
+        //ui->recipeImage->scene()->clear();
+        QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+        QUrl imageUrl(selectedRecipe->imageURL.toString());
+
+        QNetworkReply *reply = manager->get(QNetworkRequest(imageUrl));
+        connect(reply, &QNetworkReply::finished, [=]() {
+            if (reply->error() == QNetworkReply::NoError) {
+                QPixmap pixmap;
+                pixmap.loadFromData(reply->readAll());
+
+                QGraphicsScene *scene = new QGraphicsScene(this);
+                scene->addPixmap(pixmap);
+
+                ui->savedRecipeImage->setScene(scene);
+                ui->savedRecipeImage->fitInView(scene->itemsBoundingRect(), Qt::KeepAspectRatio);
+            } else {
+                qDebug() << "Failed to load image:" << reply->errorString();
+            }
+            reply->deleteLater();
+        });
+        ui->savedRecipeIngredientTable->setRowCount(0); //reset table
+        for (auto* ingredient : *(selectedRecipe->ingredients)) {
+            int row = ui->savedRecipeIngredientTable->rowCount();
+            ui->savedRecipeIngredientTable->insertRow(row);
+
+
+            ui->savedRecipeIngredientTable->setItem(row, 0, new QTableWidgetItem(QString::number(ingredient->amount)));
+            ui->savedRecipeIngredientTable->setItem(row, 1, new QTableWidgetItem(ingredient->units));
+            ui->savedRecipeIngredientTable->setItem(row, 2, new QTableWidgetItem(ingredient->ingredient));
+        }
+    }
+}
+
+
+void MainWindow::on_searchResult_itemClicked(QListWidgetItem *item)
+{
+    QVariant data = item->data(Qt::UserRole);
+    this->selectedRecipe = data.value<recipe*>();  // Store selected recipe
+    if (selectedRecipe)
+    {
+        ui->recipeName->setText(selectedRecipe->title);
+        ui->recipeDesc->setText(selectedRecipe->description);
+
+        // testing
+        ui->recipeURL->setText(selectedRecipe->recipeURL.toString());
+        ui->recipeServings->setText(QString::number(selectedRecipe->servings));
+        ui->recipeCalPerSevings->setText(QString::number(selectedRecipe->calories));
+
+        //ui->recipeImage->scene()->clear();
+        QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+        QUrl imageUrl(selectedRecipe->imageURL.toString());
+
+        QNetworkReply *reply = manager->get(QNetworkRequest(imageUrl));
+        connect(reply, &QNetworkReply::finished, [=]() {
+            if (reply->error() == QNetworkReply::NoError) {
+                QPixmap pixmap;
+                pixmap.loadFromData(reply->readAll());
+
+                QGraphicsScene *scene = new QGraphicsScene(this);
+                scene->addPixmap(pixmap);
+
+                ui->recipeImage->setScene(scene);
+                ui->recipeImage->fitInView(scene->itemsBoundingRect(), Qt::KeepAspectRatio);
+            } else {
+                qDebug() << "Failed to load image:" << reply->errorString();
+            }
+            reply->deleteLater();
+        });
+        ui->recipeIngredientTable->setRowCount(0); //reset table
+        for (auto* ingredient : *(selectedRecipe->ingredients)) {
+            int row = ui->recipeIngredientTable->rowCount();
+            ui->recipeIngredientTable->insertRow(row);
+
+
+            ui->recipeIngredientTable->setItem(row, 0, new QTableWidgetItem(QString::number(ingredient->amount)));
+            ui->recipeIngredientTable->setItem(row, 1, new QTableWidgetItem(ingredient->units));
+            ui->recipeIngredientTable->setItem(row, 2, new QTableWidgetItem(ingredient->ingredient));
+        }
+    }
+}
+
+void MainWindow::on_deleteSavedRecipesButton_clicked()
+{
+    QList<QListWidgetItem*> deletedItems = this->ui->savedRecipesList->selectedItems();
+    recipe* recipeToDelete = deletedItems[0]->data(Qt::UserRole).value<recipe*>();
+    qDebug() << "Found " << deletedItems.size() << " item(s) to delete";
+    if(deletedItems.size() != 0)
+    {
+        QListWidgetItem* deletedItem = deletedItems[0];
+        QVariant data = deletedItem->data(Qt::UserRole);
+        selectedRecipe = data.value<recipe*>();
+        QString titleToRemove = QString(selectedRecipe->title);
+        for (auto it = savedRecipes->begin(); it != savedRecipes->end();) {
+            if (recipeToDelete == *it) {
+                delete *it;  // Free memory before erasing
+                it = savedRecipes->erase(it);  // Erase returns next valid iterator
+                this->savedRecipes->shrink_to_fit();
+                addSavedRecipesToList();//to update list
+                return;
+            } else {
+                ++it;
+            }
+        }
+
+    }
+    else return; //if no item selected return
+
+}
+
+
+void MainWindow::on_savedRecipeName_textChanged(const QString &arg1)
+{
+    this->selectedRecipe->title = arg1;
+}
+
+
+void MainWindow::on_savedRecipeURL_textChanged(const QString &arg1)
+{
+    this->selectedRecipe->recipeURL = arg1;
+}
+
+
+void MainWindow::on_savedRecipeDesc_textChanged()
+{
+    this->selectedRecipe->description = this->ui->savedRecipeDesc->toPlainText();
+}
+
+
+void MainWindow::on_savedRecipeServings_textChanged(const QString &arg1)
+{
+    this->selectedRecipe->servings = arg1.toInt();
+}
+
+
+void MainWindow::on_savedRecipeCalPerSevings_textChanged(const QString &arg1)
+{
+    this->selectedRecipe->calories = arg1.toDouble();
+}
+
+
+void MainWindow::on_savedRecipeIngredientTable_cellChanged(int row, int column)
+{
+    /*
+    std::vector<recipe::recipeIngredientStruct*>* selectedRecipeIngredientStruct = selectedRecipe->ingredients;
+    (*selectedRecipeIngredientStruct)[row]->ingredient = this->ui->recipeIngredientTable->item(row, column)->text();
+*/
+}
+
+
+void MainWindow::on_savedRecipeIngredientTable_itemChanged(QTableWidgetItem *item)
+{
+    /*
+    int row = this->ui->savedRecipeIngredientTable->row(item);  // Get the row
+    int column =  this->ui->savedRecipeIngredientTable->column(item);  // Get the column
+    std::vector<recipe::recipeIngredientStruct*>* selectedRecipeIngredientStruct = selectedRecipe->ingredients;
+    (*selectedRecipeIngredientStruct)[row]->ingredient = this->ui->recipeIngredientTable->item(row, column)->text();
+*/
+}
+
+
+void MainWindow::on_tabWidget_currentChanged(int index)
+{
+    this->selectedRecipe = nullptr;
+}
+
+
+void MainWindow::on_cloneSavedRecipeButton_clicked()
+{
+    if(selectedRecipe == nullptr) return;
+    this->savedRecipes->push_back(selectedRecipe->createClone());
+    this->selectedRecipe = nullptr;
+    addSavedRecipesToList();
+}
+
+
+void MainWindow::on_searchSavedRecipesBox_textChanged(const QString &arg1)
+{
+    updateSavedRecipesListWithSearch(arg1.toUpper());
+}
+

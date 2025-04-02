@@ -35,6 +35,28 @@ public:
         this->description = inDescription;
     }
     void printRecipeToDebug();
+    recipe*  createClone();
+    bool operator==(const recipe& other) const {
+        if(this->recipeID == other.recipeID)
+        {
+            if(this->recipeURL == other.recipeURL)
+            {
+                if(this->calories == this->calories)
+                {
+                    if(this->servings == other.servings)
+                    {
+                        if(this->description == other.description)
+                        {
+                            if(this->title == other.title){
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
 };
 

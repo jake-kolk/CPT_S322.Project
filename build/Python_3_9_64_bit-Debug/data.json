@@ -3,5 +3,71 @@
         "APIKEY": "acb49a24a46a4d258247853ba5566a1d"
     },
     [
+        {
+            "calories": 382.36,
+            "description": "Potato Gnocchi With Kale and Mushrooms In A Goat Cheese Sauce might be just the main course you are searching for. This lacto ovo vegetarian recipe serves 4 and costs $1.83 per serving. One serving contains 390 calories, 17g of protein, and 10g of fat. If you have semi-soft goat cheese, nutmeg, egg yolk, and a few other ingredients on hand, you can make it. Only a few people really liked this Mediterranean dish. It is brought to you by Foodista. This recipe is liked by 1 foodies and cooks. From preparation to the plate, this recipe takes approximately 45 minutes. With a spoonacular score of 84%, this dish is outstanding. If you like this recipe, you might also like recipes such as Crispy Brown Butter Sweet Potato Gnocchi with Balsamic Caramelized Mushrooms + Goat Cheese, Beet Gnocchi With Mustard Sauce And Goat Cheese, and Goat Cheese Gnocchi with Bacon, Dates and Kentucky Wine Sauce.",
+            "imageURL": "https://img.spoonacular.com/recipes/656972-312x231.jpg",
+            "ingredients": [
+                {
+                    "name": "baking potatoes",
+                    "quantity": 0.38,
+                    "unit": "pounds"
+                },
+                {
+                    "name": "flour",
+                    "quantity": 0.25,
+                    "unit": "cup"
+                },
+                {
+                    "name": "egg yolk",
+                    "quantity": 0.25,
+                    "unit": ""
+                },
+                {
+                    "name": "kosher salt",
+                    "quantity": 0.25,
+                    "unit": "teaspoon"
+                },
+                {
+                    "name": "nutmeg",
+                    "quantity": 0.06,
+                    "unit": "teaspoon"
+                },
+                {
+                    "name": "olive oil",
+                    "quantity": 0.5,
+                    "unit": "teaspoons"
+                },
+                {
+                    "name": "crimmini mushrooms",
+                    "quantity": 2,
+                    "unit": "ounces"
+                },
+                {
+                    "name": "kale",
+                    "quantity": 0.5,
+                    "unit": "cups"
+                },
+                {
+                    "name": "semi-soft goat cheese",
+                    "quantity": 1,
+                    "unit": "ounces"
+                },
+                {
+                    "name": "skim milk",
+                    "quantity": 0.13,
+                    "unit": "cup"
+                },
+                {
+                    "name": "salt and pepper",
+                    "quantity": 1,
+                    "unit": "servings"
+                }
+            ],
+            "recipeID": 656972,
+            "recipeURL": "https://spoonacular.com/recipes/Potato-Gnocchi-With-Kale-and-Mushrooms-In-A-Goat-Cheese-Sauce-656972",
+            "servings": 4,
+            "title": "Potato Gnocchi With Kale and Mushrooms In A Goat Cheese Sauce"
+        }
     ]
 ]
