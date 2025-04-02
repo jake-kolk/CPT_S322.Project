@@ -66,8 +66,216 @@
             ],
             "recipeID": 656972,
             "recipeURL": "https://spoonacular.com/recipes/Potato-Gnocchi-With-Kale-and-Mushrooms-In-A-Goat-Cheese-Sauce-656972",
-            "servings": 4,
+            "servings": 3,
             "title": "Potato Gnocchi With Kale and Mushrooms In A Goat Cheese Sauce"
+        },
+        {
+            "calories": 128.72,
+            "description": "The recipe Spicy Black-Eyed Pea Curry with Swiss Chard and Roasted Eggplant could satisfy your Indian craving in around 45 minutes. This recipe serves 6 and costs 94 cents per serving. This hor d'oeuvre has 129 calories, 7g of protein, and 2g of fat per serving. It is brought to you by foodandspice.blogspot.com. If you have black-eyed peas, olive oil, globe, and a few other ingredients on hand, you can make it. This recipe is liked by 32 foodies and cooks. It is a good option if you're following a gluten free, dairy free, lacto ovo vegetarian, and vegan diet. All things considered, we decided this recipe deserves a spoonacular score of 98%. This score is outstanding. Try Roasted Eggplant and Swiss Chard Lasagna, Pumpkin, Black-Eyed Pea, and Coconut Curry, and Spicy Black-eyed Pea Relish for similar recipes.",
+            "imageURL": "https://img.spoonacular.com/recipes/798400-312x231.jpg",
+            "ingredients": [
+                {
+                    "name": "black-eyed peas",
+                    "quantity": 0.33,
+                    "unit": "cups"
+                },
+                {
+                    "name": "curry powder",
+                    "quantity": 0.33,
+                    "unit": "teaspoons"
+                },
+                {
+                    "name": "garam masala",
+                    "quantity": 0.08,
+                    "unit": "teaspoon"
+                },
+                {
+                    "name": "globe",
+                    "quantity": 0.17,
+                    "unit": "large"
+                },
+                {
+                    "name": "ground coriander",
+                    "quantity": 0.08,
+                    "unit": "teaspoon"
+                },
+                {
+                    "name": "ground cumin",
+                    "quantity": 0.08,
+                    "unit": "teaspoon"
+                },
+                {
+                    "name": "ground mustard powder",
+                    "quantity": 0.08,
+                    "unit": "teaspoon"
+                },
+                {
+                    "name": "juice of lemon",
+                    "quantity": 0.5,
+                    "unit": ""
+                },
+                {
+                    "name": "olive oil",
+                    "quantity": 0.33,
+                    "unit": "teaspoons"
+                },
+                {
+                    "name": "chilies",
+                    "quantity": 0.33,
+                    "unit": ""
+                },
+                {
+                    "name": "sea salt",
+                    "quantity": 0.17,
+                    "unit": "teaspoon"
+                },
+                {
+                    "name": "shallots",
+                    "quantity": 0.33,
+                    "unit": ""
+                },
+                {
+                    "name": "swiss chard",
+                    "quantity": 0.17,
+                    "unit": "bunch"
+                },
+                {
+                    "name": "tomato",
+                    "quantity": 0.17,
+                    "unit": "medium"
+                },
+                {
+                    "name": "water",
+                    "quantity": 0.83,
+                    "unit": "tablespoons"
+                }
+            ],
+            "recipeID": 798400,
+            "recipeURL": "https://spoonacular.com/recipes/Spicy-Black-Eyed-Pea-Curry-with-Swiss-Chard-and-Roasted-Eggplant-798400",
+            "servings": 6,
+            "title": "Spicy Black Eyed Pea Curry with Swiss Chard and Roasted Eggplant"
+        },
+        {
+            "calories": 248.3,
+            "description": "The recipe Cauliflower, Brown Rice, and Vegetable Fried Rice is ready in around 30 minutes and is definitely a great gluten free, dairy free, lacto ovo vegetarian, and vegan option for lovers of Chinese food. This recipe makes 8 servings with 248 calories, 7g of protein, and 13g of fat each. For $1.19 per serving, this recipe covers 19% of your daily requirements of vitamins and minerals. It works well as a hor d'oeuvre. 3689 people have made this recipe and would make it again. It is brought to you by fullbellysisters.blogspot.com. Head to the store and pick up broccoli, t grapeseed oil, sesame seeds, and a few other things to make it today. With a spoonacular score of 100%, this dish is amazing. Cauliflower, Brown Rice, and Vegetable Fried Rice, Cauliflower, Brown Rice, and Vegetable Fried Rice, and Cauliflower, Brown Rice, and Vegetable Fried Rice are very similar to this recipe.",
+            "imageURL": "https://img.spoonacular.com/recipes/716426-312x231.jpg",
+            "ingredients": [
+                {
+                    "name": "grapeseed oil",
+                    "quantity": 0.25,
+                    "unit": "tablespoons"
+                },
+                {
+                    "name": "coconut oil",
+                    "quantity": 0.25,
+                    "unit": "tablespoons"
+                },
+                {
+                    "name": "scallions",
+                    "quantity": 0.88,
+                    "unit": ""
+                },
+                {
+                    "name": "garlic",
+                    "quantity": 0.63,
+                    "unit": "cloves"
+                },
+                {
+                    "name": "cauliflower",
+                    "quantity": 0.13,
+                    "unit": "head"
+                },
+                {
+                    "name": "brown rice",
+                    "quantity": 0.38,
+                    "unit": "cups"
+                },
+                {
+                    "name": "broccoli",
+                    "quantity": 0.25,
+                    "unit": "cups"
+                },
+                {
+                    "name": "peas",
+                    "quantity": 0.13,
+                    "unit": "cup"
+                },
+                {
+                    "name": "soy sauce",
+                    "quantity": 0.38,
+                    "unit": "T"
+                },
+                {
+                    "name": "sesame oil",
+                    "quantity": 0.25,
+                    "unit": "teaspoons"
+                },
+                {
+                    "name": "sesame seeds",
+                    "quantity": 1,
+                    "unit": "servings"
+                },
+                {
+                    "name": "additional scallion tops",
+                    "quantity": 1,
+                    "unit": "servings"
+                },
+                {
+                    "name": "salt",
+                    "quantity": 1,
+                    "unit": "servings"
+                }
+            ],
+            "recipeID": 716426,
+            "recipeURL": "https://spoonacular.com/recipes/Cauliflower,-Brown-Rice,-and-Vegetable-Fried-Rice-716426",
+            "servings": 8,
+            "title": "Cauliflower, Brown Rice, and Vegetable Fried Rice"
+        },
+        {
+            "calories": 625.07,
+            "description": "Broccolini Quinoa Pilaf requires approximately 30 minutes from start to finish. For $4.14 per serving, you get a main course that serves 2. One portion of this dish contains around 20g of protein, 31g of fat, and a total of 625 calories. Head to the store and pick up vegetable broth, onion, olive oil, and a few other things to make it today. A few people made this recipe, and 94 would say it hit the spot. It is a rather expensive recipe for fans of Mediterranean food. It is a good option if you're following a gluten free, dairy free, lacto ovo vegetarian, and vegan diet. It is brought to you by Pick Fresh Foods. With a spoonacular score of 98%, this dish is excellent. Similar recipes are Spring Broccolini & Kale Quinoa Bowls, Orange-Sesame Salmon with Quinoa & Broccolini, and Black Pepper Goat Cheese and Chard Quinoa with Roasted Broccolini.",
+            "imageURL": "https://img.spoonacular.com/recipes/715769-312x231.jpg",
+            "ingredients": [
+                {
+                    "name": "broccolini",
+                    "quantity": 0.5,
+                    "unit": "bunch"
+                },
+                {
+                    "name": "garlic clove",
+                    "quantity": 0.5,
+                    "unit": ""
+                },
+                {
+                    "name": "olive oil",
+                    "quantity": 0.5,
+                    "unit": "tbsp"
+                },
+                {
+                    "name": "onion",
+                    "quantity": 0.25,
+                    "unit": "cup"
+                },
+                {
+                    "name": "quinoa",
+                    "quantity": 0.5,
+                    "unit": "cup"
+                },
+                {
+                    "name": "vegetable broth",
+                    "quantity": 1,
+                    "unit": "cups"
+                },
+                {
+                    "name": "walnuts",
+                    "quantity": 1,
+                    "unit": "oz"
+                }
+            ],
+            "recipeID": 715769,
+            "recipeURL": "https://spoonacular.com/recipes/Broccolini-Quinoa-Pilaf-715769",
+            "servings": 2,
+            "title": "Broccolini Quinoa Pilaf"
         }
     ]
 ]

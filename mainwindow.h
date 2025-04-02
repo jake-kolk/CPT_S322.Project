@@ -46,7 +46,7 @@ private slots:
     void on_removeMealPlan_clicked();
 
 
-    void on_addMealPlan_clicked();
+    //void on_addMealPlan_clicked();
 
     void on_mealPlanSelect_currentIndexChanged(int index);
 
@@ -91,6 +91,7 @@ private slots:
     void on_cloneSavedRecipeButton_clicked();
 
     void on_searchSavedRecipesBox_textChanged(const QString &arg1);
+
 
 
 private:
