@@ -20,6 +20,7 @@
 #include <QFileInfo>
 #include <QTableWidgetItem>
 #include "recipe.h"
+#include "mealplan.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -44,11 +45,9 @@ private slots:
 
     void on_removeMealPlan_clicked();
 
-<<<<<<< Updated upstream
+
     void on_addMealPlan_clicked();
 
-=======
->>>>>>> Stashed changes
     void on_mealPlanSelect_currentIndexChanged(int index);
 
     void on_searchButton_clicked();
@@ -67,8 +66,6 @@ private slots:
 
     void on_addAPIKeyButton_triggered();
 
-<<<<<<< Updated upstream
-=======
     void on_mealPlanNewButton_clicked();
 
     void on_savedRecipesList_itemClicked(QListWidgetItem *item);
@@ -94,7 +91,7 @@ private slots:
     void on_cloneSavedRecipeButton_clicked();
 
     void on_searchSavedRecipesBox_textChanged(const QString &arg1);
->>>>>>> Stashed changes
+
 
 private:
     Ui::MainWindow *ui;
@@ -104,14 +101,13 @@ private:
     std::vector<recipe*>* savedRecipes = nullptr;
     QString user;
     QString APIKEY;
+
     void saveDatatoJson();
-<<<<<<< Updated upstream
-=======
     std::vector<MealPlan> mealPlans;
+
 
     void addSavedRecipesToList();
     void updateSavedRecipesListWithSearch(QString search);
->>>>>>> Stashed changes
 protected:
     void closeEvent(QCloseEvent *event) override;
 

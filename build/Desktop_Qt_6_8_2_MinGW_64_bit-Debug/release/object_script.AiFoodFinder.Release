@@ -1,0 +1,11 @@
+release/addapikeydialog.o
+release/main.o
+release/mainwindow.o
+release/mealplan.o
+release/newmealplandialog.o
+release/recipe.o
+release/recipesearch.o
+release/moc_addapikeydialog.o
+release/moc_mainwindow.o
+release/moc_newmealplandialog.o
+release/moc_search.o
