@@ -137,6 +137,7 @@ void MainWindow::on_saveRecipeButton_clicked()
         QListWidgetItem* item = new QListWidgetItem(selectedRecipe->title, ui->savedRecipesList);
         item->setData(Qt::UserRole, QVariant::fromValue(selectedRecipe));
     }
+    this->savedRecipes->push_back(selectedRecipe);
 }
 
 
@@ -152,6 +153,7 @@ void MainWindow::on_savedRecipeList_itemActivated(QListWidgetItem *item)
         ui->savedRecipeName->setText(savedRecipe->title);
         ui->savedRecipeDesc->setText(savedRecipe->description);
     }
+
 }
 
 
