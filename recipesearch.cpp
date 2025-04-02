@@ -1,7 +1,7 @@
 
 #include "recipesearch.h"
 
-std::vector<recipe*>* recipeSearch::makeRequest(QString cuisine, std::vector<QString> ingredients, QString diet, QString mealType, int NumRecipes) {
+std::vector<recipe*>* recipeSearch::makeRequest(QString cuisine, std::vector<QString> ingredients, QString diet, QString mealType, int NumRecipes, QString searchQuery) {
     QUrl url("https://api.spoonacular.com/recipes/complexSearch");
     //https://api.spoonacular.com/recipes/complexSearch
     QUrlQuery query;
@@ -30,7 +30,7 @@ std::vector<recipe*>* recipeSearch::makeRequest(QString cuisine, std::vector<QSt
     if (!diet.isEmpty()) query.addQueryItem("diet", diet);
     if (!cuisine.isEmpty()) query.addQueryItem("cuisine", cuisine);
     if (!mealType.isEmpty()) query.addQueryItem("type", mealType);
-
+    if(searchQuery != "") query.addQueryItem("query", searchQuery);
     url.setQuery(query);
 
     qDebug() << "Query: " << url;
@@ -75,7 +75,7 @@ std::vector<recipe*>* recipeSearch::handleResponse(QNetworkReply* reply) {
         return recipes;
     }
 
-    qDebug() << "Raw Response Data: " << responseData;
+    //qDebug() << "Raw Response Data: " << responseData;
 
     QJsonObject jsonObject = jsonResponse.object();
     if (jsonObject.contains("results")) {
@@ -95,12 +95,12 @@ std::vector<recipe*>* recipeSearch::handleResponse(QNetworkReply* reply) {
                 if (title.isEmpty() || recipeID == 0) continue; //check to make sure we are reading valid recipe
 
                 // Debug output
-                qDebug() << "Recipe: " << title;
-                qDebug() << "Recipe ID: " << recipeID;
-                qDebug() << "URL: " << recipeURL.toString();
-                qDebug() << "Servings: " << servings;
-                qDebug() << "Image URL: " << imageURL;
-                qDebug() << "Decription: " << description;
+                //qDebug() << "Recipe: " << title;
+                //qDebug() << "Recipe ID: " << recipeID;
+                //qDebug() << "URL: " << recipeURL.toString();
+                //qDebug() << "Servings: " << servings;
+                //qDebug() << "Image URL: " << imageURL;
+                //qDebug() << "Decription: " << description;
 
                 std::vector<recipe::recipeIngredientStruct*>* ingredeintVector = new std::vector<recipe::recipeIngredientStruct*>;
                 recipe::recipeIngredientStruct* is;
@@ -109,14 +109,14 @@ std::vector<recipe*>* recipeSearch::handleResponse(QNetworkReply* reply) {
                 QJsonArray nutrientsArray = nutritionObj["nutrients"].toArray();
                 QJsonObject caloriesObj = nutrientsArray.first().toObject();
                 double calories = caloriesObj["amount"].toDouble();
-                qDebug() << "Calories: " << calories;
+                //qDebug() << "Calories: " << calories;
 
                 QJsonArray ingredientsArray = nutritionObj["ingredients"].toArray();\
 
                 QString unit;
 
                 // Iterate over ingredients
-                qDebug() << "Ingredients:";
+                //qDebug() << "Ingredients:";
                 for (const QJsonValue &ingredientVal : ingredientsArray) {
                     QJsonObject ingredientObj = ingredientVal.toObject();
                     is = new recipe::recipeIngredientStruct;
@@ -128,7 +128,14 @@ std::vector<recipe*>* recipeSearch::handleResponse(QNetworkReply* reply) {
                         name.remove(0,4);
                         is->ingredient = name;
                         is->units = unit;
-                    }else{
+                    }else if(name.mid(0,2) == "pd")// API has error in their DB, pd is included in name, this fixes it
+                    {
+                        unit = name.mid(0,2);
+                        name.remove(0,3);
+                        is->ingredient = name;
+                        is->units = unit;
+                    }
+                    else{
                         is->ingredient = name;
                         QString unit = ingredientObj["unit"].toString();
                         is->units = unit;
@@ -138,7 +145,7 @@ std::vector<recipe*>* recipeSearch::handleResponse(QNetworkReply* reply) {
                     is->amount = amount;
 
                     ingredeintVector->push_back(is);
-                    qDebug() << "Ingredient:" << name << "- Amount:" << amount << unit;
+                    //qDebug() << "Ingredient:" << name << "- Amount:" << amount << unit;
                 }
                 // Create new recipe object and store in the vector
                 //(int id, QUrl inRecipeURL, QString inTitle, std::vector<recpieIngredientStruct*>* inIngredients,

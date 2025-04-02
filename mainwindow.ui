@@ -41,7 +41,7 @@
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="search">
        <property name="sizePolicy">
@@ -54,188 +54,16 @@
         <string>Search</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_3">
-        <item row="0" column="0" colspan="4">
-         <layout class="QGridLayout" name="gridLayout" rowstretch="0,0" columnstretch="2,0" columnminimumwidth="0,0">
-          <property name="sizeConstraint">
-           <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
-          </property>
-          <property name="verticalSpacing">
-           <number>7</number>
-          </property>
-          <item row="0" column="0">
-           <widget class="QLineEdit" name="recipeSearchbox">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-              <horstretch>5</horstretch>
-              <verstretch>2</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>35</height>
-             </size>
-            </property>
-            <property name="sizeIncrement">
-             <size>
-              <width>0</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <family>Calibri</family>
-              <pointsize>12</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="placeholderText">
-             <string>Search for Recipes</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLineEdit" name="recipeSearchFilters">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>20</height>
-             </size>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="placeholderText">
-             <string>Search Filters</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1" rowspan="2">
-           <widget class="QPushButton" name="searchButton">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>35</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Search</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
+        <item row="1" column="0">
+         <widget class="QComboBox" name="cuisineComboBox"/>
         </item>
-        <item row="1" column="0" rowspan="2">
-         <widget class="QListWidget" name="searchResult">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>2</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="resizeMode">
-           <enum>QListView::ResizeMode::Adjust</enum>
-          </property>
-          <property name="layoutMode">
-           <enum>QListView::LayoutMode::SinglePass</enum>
-          </property>
-          <property name="spacing">
-           <number>0</number>
-          </property>
-         </widget>
+        <item row="1" column="1">
+         <widget class="QComboBox" name="dietComboBox"/>
         </item>
-        <item row="1" column="1" colspan="3">
-         <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="3,0">
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout_3" stretch="2,0">
-            <property name="spacing">
-             <number>0</number>
-            </property>
-            <property name="sizeConstraint">
-             <enum>QLayout::SizeConstraint::SetNoConstraint</enum>
-            </property>
-            <item>
-             <widget class="QLineEdit" name="recipeName">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <family>Calibri</family>
-                <pointsize>12</pointsize>
-               </font>
-              </property>
-              <property name="readOnly">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="recipeURL">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>20</height>
-               </size>
-              </property>
-              <property name="readOnly">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <widget class="QPushButton" name="saveRecipeButton">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>60</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Save Recipe</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
+        <item row="1" column="3">
+         <widget class="QComboBox" name="mealTypeComboBox"/>
         </item>
-        <item row="2" column="1">
+        <item row="3" column="1">
          <widget class="QScrollArea" name="scrollArea">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -251,7 +79,7 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>443</width>
+             <width>439</width>
              <height>499</height>
             </rect>
            </property>
@@ -374,7 +202,103 @@ li.checked::marker { content: &quot;\2612&quot;; }
           </widget>
          </widget>
         </item>
-        <item row="2" column="2">
+        <item row="2" column="1" colspan="4">
+         <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="3,0">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_3" stretch="2,0">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="sizeConstraint">
+             <enum>QLayout::SizeConstraint::SetNoConstraint</enum>
+            </property>
+            <item>
+             <widget class="QLineEdit" name="recipeName">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>Calibri</family>
+                <pointsize>12</pointsize>
+               </font>
+              </property>
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="recipeURL">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>20</height>
+               </size>
+              </property>
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QPushButton" name="saveRecipeButton">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>60</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Save Recipe</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="2" column="0" rowspan="2">
+         <widget class="QListWidget" name="searchResult">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>2</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="resizeMode">
+           <enum>QListView::ResizeMode::Adjust</enum>
+          </property>
+          <property name="layoutMode">
+           <enum>QListView::LayoutMode::SinglePass</enum>
+          </property>
+          <property name="spacing">
+           <number>0</number>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="3">
          <widget class="QWidget" name="widget_2" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -389,6 +313,32 @@ li.checked::marker { content: &quot;\2612&quot;; }
            </size>
           </property>
           <layout class="QGridLayout" name="gridLayout_5">
+           <item row="0" column="0">
+            <widget class="QLabel" name="recipeServingsLabel">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Servings:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="recipeCalPerServingsLabel">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Calories Per Serving: </string>
+             </property>
+            </widget>
+           </item>
            <item row="1" column="1">
             <widget class="QLineEdit" name="recipeCalPerSevings">
              <property name="sizePolicy">
@@ -418,32 +368,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
              </property>
              <property name="readOnly">
               <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="recipeServingsLabel">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>Servings:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="recipeCalPerServingsLabel">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>Calories Per Serving: </string>
              </property>
             </widget>
            </item>
@@ -526,23 +450,50 @@ li.checked::marker { content: &quot;\2612&quot;; }
           </layout>
          </widget>
         </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="recipes">
-       <attribute name="title">
-        <string>Saved Recipes</string>
-       </attribute>
-       <layout class="QGridLayout" name="gridLayout_9">
-        <item row="0" column="0" colspan="3">
-         <layout class="QGridLayout" name="gridLayout_7" rowstretch="0" columnstretch="0,0,0,0,0" columnminimumwidth="0,0,0,0,0">
+        <item row="0" column="0" colspan="5">
+         <layout class="QGridLayout" name="gridLayout" rowstretch="0,0" columnstretch="2,0" columnminimumwidth="0,0">
           <property name="sizeConstraint">
            <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
           </property>
           <property name="verticalSpacing">
            <number>7</number>
           </property>
-          <item row="0" column="1">
-           <widget class="QPushButton" name="searchSavedRecipesButton">
+          <item row="0" column="0">
+           <widget class="QLineEdit" name="recipeSearchbox">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>5</horstretch>
+              <verstretch>2</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>35</height>
+             </size>
+            </property>
+            <property name="sizeIncrement">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Calibri</family>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="placeholderText">
+             <string>Search for Recipes</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" rowspan="2">
+           <widget class="QPushButton" name="searchButton">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
               <horstretch>0</horstretch>
@@ -560,7 +511,43 @@ li.checked::marker { content: &quot;\2612&quot;; }
             </property>
            </widget>
           </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="recipes">
+       <attribute name="title">
+        <string>Saved Recipes</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_9">
+        <item row="0" column="0" colspan="3">
+         <layout class="QGridLayout" name="gridLayout_7" rowstretch="0" columnstretch="0,0,0,0">
+          <property name="sizeConstraint">
+           <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
+          </property>
+          <property name="verticalSpacing">
+           <number>7</number>
+          </property>
           <item row="0" column="2">
+           <widget class="QPushButton" name="saveSavedRecipeEditButton">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>35</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Save Recipe</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
            <widget class="QPushButton" name="createNewRecipeButton">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -580,7 +567,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
            </widget>
           </item>
           <item row="0" column="3">
-           <widget class="QPushButton" name="saveSavedRecipeEditButton">
+           <widget class="QPushButton" name="cloneSavedRecipeButton">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
               <horstretch>0</horstretch>
@@ -594,7 +581,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
              </size>
             </property>
             <property name="text">
-             <string>Save Recipe</string>
+             <string>Clone Recipe</string>
             </property>
            </widget>
           </item>
@@ -623,25 +610,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
             </property>
             <property name="placeholderText">
              <string>Search for Saved Recipes</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="4">
-           <widget class="QPushButton" name="cloneSavedRecipeButton">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>35</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Clone Recipe</string>
             </property>
            </widget>
           </item>
@@ -1344,7 +1312,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
     </property>
     <property name="font">
      <font>
+      <family>Calibri</family>
       <pointsize>9</pointsize>
+      <kerning>true</kerning>
      </font>
     </property>
     <property name="tearOffEnabled">
