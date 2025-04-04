@@ -1,5 +1,5 @@
 # Sprint 2 Report
-
+https://drive.google.com/drive/folders/131r3anyBOpEMrFigyhomL-LyIMGxbooW?usp=sharing
 Video Link: 
 
 ## What's New (User Facing)
@@ -28,7 +28,7 @@ We were able to finish all parts of the sprint we started.
 Please review the following code files, which were actively developed during this
 sprint, for quality:
 * [addapikeydialog.cpp](https://github.com/jake-kolk/CPT_S322.Project/blob/main/addapikeydialog.cpp)
-* [addapikeydialog.h]](https://github.com/jake-kolk/CPT_S322.Project/blob/main/addapikeydialog.h)
+* [addapikeydialog.h](https://github.com/jake-kolk/CPT_S322.Project/blob/main/addapikeydialog.h)
 * [addapikeydialog.ui](https://github.com/jake-kolk/CPT_S322.Project/blob/main/addapikeydialog.ui)
 * [mainwindow.cpp](https://github.com/jake-kolk/CPT_S322.Project/blob/main/mainwindow.cpp)
 * [mainwindow.h](https://github.com/jake-kolk/CPT_S322.Project/blob/main/mainwindow.h)
@@ -41,7 +41,7 @@ sprint, for quality:
 * [recipe.cpp](https://github.com/jake-kolk/CPT_S322.Project/blob/main/recipe.cpp)
 * [recipe.h](https://github.com/jake-kolk/CPT_S322.Project/blob/main/recipe.h)
 * [recipesearch.cpp](https://github.com/jake-kolk/CPT_S322.Project/blob/main/recipesearch.cpp)
-* [recipesearch.h](https://github.com/jake-kolk/CPT_S322.Project/blob/main/recipesearch.h0
+* [recipesearch.h](https://github.com/jake-kolk/CPT_S322.Project/blob/main/recipesearch.h)
 * [search.h](https://github.com/jake-kolk/CPT_S322.Project/blob/main/search.h) 
 
 ## Retrospective Summary
@@ -59,4 +59,3 @@ Here are changes we plan to implement in the next sprint:
 * More detailed descriptions of tasks on Kanban board
 * Spend more time testing
 * Meet more often 
-Video link: https://drive.google.com/drive/folders/131r3anyBOpEMrFigyhomL-LyIMGxbooW?usp=sharing
