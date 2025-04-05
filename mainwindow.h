@@ -21,7 +21,8 @@
 #include <QTableWidgetItem>
 #include "recipe.h"
 #include "mealplan.h"
-
+#include "newmealplandialog.h"
+#include "mealplan.h"
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -35,7 +36,8 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    void loadDataFromJson(QString filepath);//filepath should be "" unless user tried to load from non default filepath
+    void loadDataFromJson(QString filePath="data.json");//filepath should not be included unless user tried to load from non default filepath
+    MealPlan* selectedMealPlan;
 
 private slots:
 
@@ -94,6 +96,23 @@ private slots:
 
 
 
+    void on_tabWidget_tabBarClicked(int index);
+
+    void on_mealPlanAddRecipeButton_clicked();
+
+    void on_mealPlanRecipesList_itemClicked(QListWidgetItem *item);
+
+
+    void on_mealPlanCalender_selectionChanged();
+
+    void on_mealPlanRemoveRecipeButton_clicked();
+
+    void on_mealPlanSelectedDayRecipesList_itemClicked(QListWidgetItem *item);
+
+    void on_mealPlanSelectedDayRecipesList_itemActivated(QListWidgetItem *item);
+
+    void on_mealPlanDeleteButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     recipe* selectedRecipe = nullptr;
@@ -104,8 +123,9 @@ private:
     QString APIKEY;
 
     void saveDatatoJson();
-    std::vector<MealPlan> mealPlans;
+    std::vector<MealPlan*> mealPlans;
 
+    void updateMealPlanLists();
 
     void addSavedRecipesToList();
     void updateSavedRecipesListWithSearch(QString search);

@@ -4,7 +4,8 @@
 #include <QString>
 #include <QUrl>
 #include <QDebug>
-
+#include <QJsonObject>
+#include <QJsonArray>
 class recipe
 {
 public:
@@ -57,6 +58,12 @@ public:
         }
         return false;
     }
+    recipe* clone(){
+        recipe* newRecipe = new recipe(this->recipeID, this->recipeURL, this->title, this->ingredients,
+                                       this->servings, this->calories,this->imageURL, this->description);
+        return newRecipe;
+    }
+    QJsonObject* makeRecipeObject();
 
 };
 

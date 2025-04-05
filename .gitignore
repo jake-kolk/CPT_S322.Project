@@ -1,8 +1,4 @@
-﻿################################################################################
-# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
-################################################################################
-
-/.vs/322Project/v17
+﻿/.vs/322Project/v17
 build/
-.pro.user
-data.json
+*.pro.user
+*.json

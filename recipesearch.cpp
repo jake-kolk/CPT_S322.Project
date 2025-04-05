@@ -1,4 +1,3 @@
-
 #include "recipesearch.h"
 
 std::vector<recipe*>* recipeSearch::makeRequest(QString cuisine, std::vector<QString> ingredients, QString diet, QString mealType, int NumRecipes, QString searchQuery) {

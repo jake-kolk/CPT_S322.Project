@@ -41,7 +41,7 @@
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="search">
        <property name="sizePolicy">
@@ -1003,29 +1003,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <string>Meal Plan</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_10">
-        <item row="2" column="0" rowspan="2">
-         <widget class="QCalendarWidget" name="mealPlanCalender">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>10</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="gridVisible">
-           <bool>false</bool>
-          </property>
-          <property name="selectionMode">
-           <enum>QCalendarWidget::SelectionMode::SingleSelection</enum>
-          </property>
-          <property name="horizontalHeaderFormat">
-           <enum>QCalendarWidget::HorizontalHeaderFormat::LongDayNames</enum>
-          </property>
-          <property name="verticalHeaderFormat">
-           <enum>QCalendarWidget::VerticalHeaderFormat::NoVerticalHeader</enum>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0" colspan="3">
+        <item row="1" column="0" colspan="4">
          <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0">
           <item>
            <widget class="QComboBox" name="mealPlanSelect">
@@ -1065,14 +1043,63 @@ li.checked::marker { content: &quot;\2612&quot;; }
           </item>
          </layout>
         </item>
-        <item row="3" column="2">
+        <item row="3" column="1">
+         <widget class="QListWidget" name="mealPlanSelectedDayRecipesList"/>
+        </item>
+        <item row="3" column="2" colspan="2">
+         <widget class="QListWidget" name="mealPlanRecipesList">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>3</horstretch>
+            <verstretch>2</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>Recipes for selected day</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>Saved Recipes</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0" rowspan="3">
+         <widget class="QCalendarWidget" name="mealPlanCalender">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>10</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="gridVisible">
+           <bool>false</bool>
+          </property>
+          <property name="selectionMode">
+           <enum>QCalendarWidget::SelectionMode::SingleSelection</enum>
+          </property>
+          <property name="horizontalHeaderFormat">
+           <enum>QCalendarWidget::HorizontalHeaderFormat::LongDayNames</enum>
+          </property>
+          <property name="verticalHeaderFormat">
+           <enum>QCalendarWidget::VerticalHeaderFormat::NoVerticalHeader</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
          <widget class="QPushButton" name="mealPlanRemoveRecipeButton">
           <property name="text">
            <string>Remove Recipe</string>
           </property>
          </widget>
         </item>
-        <item row="3" column="1">
+        <item row="4" column="2" colspan="2">
          <widget class="QPushButton" name="mealPlanAddRecipeButton">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -1082,16 +1109,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
           </property>
           <property name="text">
            <string>Add Recipe</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1" colspan="2">
-         <widget class="QListView" name="mealPlanRecipesList">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>3</horstretch>
-            <verstretch>2</verstretch>
-           </sizepolicy>
           </property>
          </widget>
         </item>
