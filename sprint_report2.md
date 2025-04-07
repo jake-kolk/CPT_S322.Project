@@ -1,6 +1,5 @@
 # Sprint 2 Report
-https://drive.google.com/drive/folders/131r3anyBOpEMrFigyhomL-LyIMGxbooW?usp=sharing
-Video Link: 
+Video Link: https://drive.google.com/drive/folders/131r3anyBOpEMrFigyhomL-LyIMGxbooW?usp=sharing
 
 ## What's New (User Facing)
 * Updated UI
