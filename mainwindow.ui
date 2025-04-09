@@ -38,7 +38,7 @@
     </sizepolicy>
    </property>
    <layout class="QGridLayout" name="gridLayout_2">
-    <item row="0" column="0">
+    <item row="0" column="1">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
        <number>0</number>
@@ -57,209 +57,64 @@
         <item row="1" column="0">
          <widget class="QComboBox" name="cuisineComboBox"/>
         </item>
-        <item row="1" column="1">
-         <widget class="QComboBox" name="dietComboBox"/>
-        </item>
-        <item row="1" column="3">
-         <widget class="QComboBox" name="mealTypeComboBox"/>
-        </item>
-        <item row="3" column="1">
-         <widget class="QScrollArea" name="scrollArea">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>5</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="widgetResizable">
-           <bool>true</bool>
-          </property>
-          <widget class="QWidget" name="scrollAreaWidgetContents">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>439</width>
-             <height>499</height>
-            </rect>
-           </property>
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-             <horstretch>3</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_4">
-            <property name="spacing">
-             <number>7</number>
-            </property>
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <property name="topMargin">
-             <number>0</number>
-            </property>
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
-            <property name="bottomMargin">
-             <number>0</number>
-            </property>
-            <item>
-             <widget class="QWidget" name="widget" native="true">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
-              <layout class="QVBoxLayout" name="verticalLayout_5">
-               <property name="spacing">
-                <number>7</number>
-               </property>
-               <property name="leftMargin">
-                <number>0</number>
-               </property>
-               <property name="topMargin">
-                <number>0</number>
-               </property>
-               <property name="rightMargin">
-                <number>0</number>
-               </property>
-               <property name="bottomMargin">
-                <number>0</number>
-               </property>
-               <item>
-                <widget class="QGraphicsView" name="recipeImage">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>0</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QTextEdit" name="recipeDesc">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>300</height>
-                  </size>
-                 </property>
-                 <property name="verticalScrollBarPolicy">
-                  <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
-                 </property>
-                 <property name="sizeAdjustPolicy">
-                  <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustIgnored</enum>
-                 </property>
-                 <property name="lineWrapMode">
-                  <enum>QTextEdit::LineWrapMode::WidgetWidth</enum>
-                 </property>
-                 <property name="lineWrapColumnOrWidth">
-                  <number>0</number>
-                 </property>
-                 <property name="readOnly">
-                  <bool>true</bool>
-                 </property>
-                 <property name="html">
-                  <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-hr { height: 1px; border-width: 0; }
-li.unchecked::marker { content: &quot;\2610&quot;; }
-li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Calibri'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                 </property>
-                 <property name="overwriteMode">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </widget>
-        </item>
-        <item row="2" column="1" colspan="4">
-         <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="3,0">
+        <item row="6" column="1" colspan="4">
+         <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="3">
           <item>
-           <layout class="QVBoxLayout" name="verticalLayout_3" stretch="2,0">
+           <layout class="QVBoxLayout" name="verticalLayout_3" stretch="">
             <property name="spacing">
              <number>0</number>
             </property>
             <property name="sizeConstraint">
              <enum>QLayout::SizeConstraint::SetNoConstraint</enum>
             </property>
-            <item>
-             <widget class="QLineEdit" name="recipeName">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>40</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <family>Calibri</family>
-                <pointsize>12</pointsize>
-               </font>
-              </property>
-              <property name="readOnly">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="recipeURL">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>20</height>
-               </size>
-              </property>
-              <property name="readOnly">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
            </layout>
           </item>
-          <item>
-           <widget class="QPushButton" name="saveRecipeButton">
+         </layout>
+        </item>
+        <item row="0" column="0" colspan="5">
+         <layout class="QGridLayout" name="gridLayout" rowstretch="0,0" columnstretch="2,0" columnminimumwidth="0,0">
+          <property name="sizeConstraint">
+           <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
+          </property>
+          <property name="verticalSpacing">
+           <number>7</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLineEdit" name="recipeSearchbox">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>5</horstretch>
+              <verstretch>2</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>35</height>
+             </size>
+            </property>
+            <property name="sizeIncrement">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Calibri</family>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="placeholderText">
+             <string>Search for Recipes</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" rowspan="2">
+           <widget class="QPushButton" name="searchButton">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
               <horstretch>0</horstretch>
@@ -269,36 +124,39 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <property name="maximumSize">
              <size>
               <width>16777215</width>
-              <height>60</height>
+              <height>35</height>
              </size>
             </property>
             <property name="text">
-             <string>Save Recipe</string>
+             <string>Search</string>
             </property>
            </widget>
           </item>
          </layout>
         </item>
-        <item row="2" column="0" rowspan="2">
-         <widget class="QListWidget" name="searchResult">
+        <item row="5" column="3">
+         <widget class="QPushButton" name="saveRecipeButton">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>2</horstretch>
+            <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <property name="resizeMode">
-           <enum>QListView::ResizeMode::Adjust</enum>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>60</height>
+           </size>
           </property>
-          <property name="layoutMode">
-           <enum>QListView::LayoutMode::SinglePass</enum>
-          </property>
-          <property name="spacing">
-           <number>0</number>
+          <property name="text">
+           <string>Save Recipe</string>
           </property>
          </widget>
         </item>
-        <item row="3" column="3">
+        <item row="1" column="1">
+         <widget class="QComboBox" name="dietComboBox"/>
+        </item>
+        <item row="7" column="3">
          <widget class="QWidget" name="widget_2" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -450,68 +308,198 @@ li.checked::marker { content: &quot;\2612&quot;; }
           </layout>
          </widget>
         </item>
-        <item row="0" column="0" colspan="5">
-         <layout class="QGridLayout" name="gridLayout" rowstretch="0,0" columnstretch="2,0" columnminimumwidth="0,0">
-          <property name="sizeConstraint">
-           <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
+        <item row="6" column="0" rowspan="3">
+         <widget class="QListWidget" name="searchResult">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>2</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
           </property>
-          <property name="verticalSpacing">
-           <number>7</number>
+          <property name="resizeMode">
+           <enum>QListView::ResizeMode::Adjust</enum>
           </property>
-          <item row="0" column="0">
-           <widget class="QLineEdit" name="recipeSearchbox">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-              <horstretch>5</horstretch>
-              <verstretch>2</verstretch>
-             </sizepolicy>
+          <property name="layoutMode">
+           <enum>QListView::LayoutMode::SinglePass</enum>
+          </property>
+          <property name="spacing">
+           <number>0</number>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="3">
+         <widget class="QComboBox" name="mealTypeComboBox"/>
+        </item>
+        <item row="7" column="1">
+         <widget class="QScrollArea" name="scrollArea">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>5</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="widgetResizable">
+           <bool>true</bool>
+          </property>
+          <widget class="QWidget" name="scrollAreaWidgetContents">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>433</width>
+             <height>499</height>
+            </rect>
+           </property>
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>3</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_4">
+            <property name="spacing">
+             <number>7</number>
             </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>35</height>
-             </size>
+            <property name="leftMargin">
+             <number>0</number>
             </property>
-            <property name="sizeIncrement">
-             <size>
-              <width>0</width>
-              <height>0</height>
-             </size>
+            <property name="topMargin">
+             <number>0</number>
             </property>
-            <property name="font">
-             <font>
-              <family>Calibri</family>
-              <pointsize>12</pointsize>
-             </font>
+            <property name="rightMargin">
+             <number>0</number>
             </property>
-            <property name="text">
-             <string/>
+            <property name="bottomMargin">
+             <number>0</number>
             </property>
-            <property name="placeholderText">
-             <string>Search for Recipes</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1" rowspan="2">
-           <widget class="QPushButton" name="searchButton">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>35</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Search</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
+            <item>
+             <widget class="QWidget" name="widget" native="true">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_5">
+               <property name="spacing">
+                <number>7</number>
+               </property>
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QGraphicsView" name="recipeImage">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QTextEdit" name="recipeDesc">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>300</height>
+                  </size>
+                 </property>
+                 <property name="verticalScrollBarPolicy">
+                  <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
+                 </property>
+                 <property name="sizeAdjustPolicy">
+                  <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustIgnored</enum>
+                 </property>
+                 <property name="lineWrapMode">
+                  <enum>QTextEdit::LineWrapMode::WidgetWidth</enum>
+                 </property>
+                 <property name="lineWrapColumnOrWidth">
+                  <number>0</number>
+                 </property>
+                 <property name="readOnly">
+                  <bool>true</bool>
+                 </property>
+                 <property name="html">
+                  <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Calibri'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                 <property name="overwriteMode">
+                  <bool>false</bool>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+        <item row="5" column="1">
+         <widget class="QLineEdit" name="recipeName">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Calibri</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0">
+         <widget class="QLabel" name="searchResultListLabel">
+          <property name="text">
+           <string>  Search Results</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -1003,29 +991,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <string>Meal Plan</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_10">
-        <item row="2" column="0" rowspan="2">
-         <widget class="QCalendarWidget" name="mealPlanCalender">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>10</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="gridVisible">
-           <bool>false</bool>
-          </property>
-          <property name="selectionMode">
-           <enum>QCalendarWidget::SelectionMode::SingleSelection</enum>
-          </property>
-          <property name="horizontalHeaderFormat">
-           <enum>QCalendarWidget::HorizontalHeaderFormat::LongDayNames</enum>
-          </property>
-          <property name="verticalHeaderFormat">
-           <enum>QCalendarWidget::VerticalHeaderFormat::NoVerticalHeader</enum>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0" colspan="3">
+        <item row="1" column="0" colspan="4">
          <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0">
           <item>
            <widget class="QComboBox" name="mealPlanSelect">
@@ -1065,14 +1031,63 @@ li.checked::marker { content: &quot;\2612&quot;; }
           </item>
          </layout>
         </item>
-        <item row="3" column="2">
+        <item row="3" column="1">
+         <widget class="QListWidget" name="mealPlanSelectedDayRecipesList"/>
+        </item>
+        <item row="3" column="2" colspan="2">
+         <widget class="QListWidget" name="mealPlanRecipesList">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>3</horstretch>
+            <verstretch>2</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>Recipes for selected day</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>Saved Recipes</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0" rowspan="3">
+         <widget class="QCalendarWidget" name="mealPlanCalender">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>10</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="gridVisible">
+           <bool>false</bool>
+          </property>
+          <property name="selectionMode">
+           <enum>QCalendarWidget::SelectionMode::SingleSelection</enum>
+          </property>
+          <property name="horizontalHeaderFormat">
+           <enum>QCalendarWidget::HorizontalHeaderFormat::LongDayNames</enum>
+          </property>
+          <property name="verticalHeaderFormat">
+           <enum>QCalendarWidget::VerticalHeaderFormat::NoVerticalHeader</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
          <widget class="QPushButton" name="mealPlanRemoveRecipeButton">
           <property name="text">
            <string>Remove Recipe</string>
           </property>
          </widget>
         </item>
-        <item row="3" column="1">
+        <item row="4" column="2" colspan="2">
          <widget class="QPushButton" name="mealPlanAddRecipeButton">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -1082,16 +1097,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
           </property>
           <property name="text">
            <string>Add Recipe</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1" colspan="2">
-         <widget class="QListView" name="mealPlanRecipesList">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>3</horstretch>
-            <verstretch>2</verstretch>
-           </sizepolicy>
           </property>
          </widget>
         </item>
@@ -1244,6 +1249,25 @@ li.checked::marker { content: &quot;\2612&quot;; }
         </item>
        </layout>
       </widget>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="recipeURL">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>20</height>
+       </size>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
      </widget>
     </item>
    </layout>

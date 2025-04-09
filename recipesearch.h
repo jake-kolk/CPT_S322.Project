@@ -33,7 +33,7 @@ public:
         this->ApiKey = key;
     };
     virtual ~recipeSearch(){}; // Virtual destructor
-    std::vector<recipe*>* makeRequest(QString cuisine, std::vector<QString> ingredients, QString diet, QString mealType, int numOfRecipes, QString query);
+    std::vector<recipe*>* makeRequest(QString cuisine, std::vector<QString> ingredients, QString diet, QString mealType, int numOfRecipes, QString query, QString sort="");
 
 };
 

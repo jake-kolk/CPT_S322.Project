@@ -12,8 +12,9 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     qDebug() << "Loading json data...\n";
+    //get saved recipes
     this->savedRecipes = new std::vector<recipe*>;
-    loadDataFromJson(QString("")); // QString("") means default location
+    loadDataFromJson("data.json"); // QString("") means default location
     addSavedRecipesToList();
 
     //set combox box option for search filters
@@ -28,9 +29,19 @@ MainWindow::MainWindow(QWidget *parent)
     this->ui->dietComboBox->addItems(diets);
     this->ui->mealTypeComboBox->addItems(types);
 
+    //set up search page to display popular recipes on start up
+    recipeSearch searchEngine(this->APIKEY);
+    std::vector<QString> ingredients = {};
+    std::vector<recipe*>* results = searchEngine.makeRequest("", ingredients, "", "", 20, "", QString("popularity"));
+    foundRecipes = results;
+    this->ui->searchResultListLabel->setText("Popular With Users");
+    if(this->foundRecipes->size() != 0) selectedRecipe = (*this->foundRecipes)[0];
+    updateSearchResultList();
+    if(this->ui->searchResult->count() > 0)on_searchResult_itemClicked(this->ui->searchResult->item(0));
 
-
-
+    //set up meal plan combo box
+    if(!mealPlans.empty())this->selectedMealPlan = mealPlans[0];
+    updateMealPlanLists();
 }
 
 MainWindow::~MainWindow()
@@ -38,13 +49,23 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::updateSearchResultList()
+{
+    ui->searchResult->clear();//update search list
+    for (recipe* r : *(this->foundRecipes))
+    {
+        QListWidgetItem* item = new QListWidgetItem(r->title, ui->searchResult);
+        item->setData(Qt::UserRole, QVariant::fromValue(r));  // store recipe pointer
+    }
+}
 
 void MainWindow::on_searchButton_clicked()
 {
+    this->ui->searchResultListLabel->setText("Search Results");
     qDebug() << "Search Button Clicked";
     QString search = ui->recipeSearchbox->text();
     recipeSearch searchEngine(this->APIKEY);
-
+    this->ui->recipeSearchbox->setPlaceholderText("Search for Recipes");
 
     std::vector<QString> ingredients = {};  // search by ingredient, temp stuff in the now for proof of concept
 
@@ -68,15 +89,8 @@ void MainWindow::on_searchButton_clicked()
     {
         query = this->ui->recipeSearchbox->text();
     }
-    std::vector<recipe*>* results = searchEngine.makeRequest(cuisine, ingredients, diet, mealType, 20, query);
-
-    ui->searchResult->clear();//update search list
-    for (recipe* r : *results)
-    {
-        QListWidgetItem* item = new QListWidgetItem(r->title, ui->searchResult);
-        item->setData(Qt::UserRole, QVariant::fromValue(r));  // store recipe pointer
-    }
-    this->foundRecipes = results;
+    foundRecipes = searchEngine.makeRequest(cuisine, ingredients, diet, mealType, 20, query);
+    updateSearchResultList();
 }
 
 void MainWindow::on_item_clicked()
@@ -116,13 +130,16 @@ void MainWindow::on_mealPlanNewButton_clicked()
         QDate endDate = dialog.getEndDate();
 
         if (!name.isEmpty()) {
-            MealPlan plan(name, startDate, endDate);
+            MealPlan* plan = new MealPlan(name, startDate, endDate);
             mealPlans.push_back(plan);
-            ui->mealPlanSelect->addItem(name);
+            ui->mealPlanSelect->addItem(name, QVariant::fromValue(plan));
+            ui->mealPlanSelect->setCurrentIndex(this->ui->mealPlanSelect->count() - 1);
+            this->selectedMealPlan = plan;
         } else {
             QMessageBox::warning(this, "Empty Name", "Please enter a meal plan name.");
         }
     }
+
 }
 
 void MainWindow::on_saveRecipeButton_clicked()
@@ -151,7 +168,9 @@ void MainWindow::on_addAPIKeyButton_triggered()
 
 void MainWindow::on_mealPlanSelect_currentIndexChanged(int index)
 {
-
+    QVariant data = ui->mealPlanSelect->itemData(index);
+    this->selectedMealPlan = qvariant_cast<MealPlan*>(data);
+    updateMealPlanLists();
 }
 
 
@@ -164,7 +183,7 @@ void MainWindow::on_recipeSearchbox_returnPressed()
 
 void MainWindow::loadDataFromJson(QString filepath)
 {
-    if(filepath == "") filepath = "data.json";
+
     QFile file(filepath);
     if (!file.open(QIODevice::ReadOnly)) {
         qWarning() << "Could not open file for reading: " << file.errorString();
@@ -251,13 +270,71 @@ void MainWindow::loadDataFromJson(QString filepath)
             this->savedRecipes->push_back(loadedRecipe);
         }
     }
+    if(rootArray.size() > 1 && rootArray[2].isArray())
+    {
+        QJsonArray mealPlanArray = rootArray[2].toArray();
+        for(const auto& mealPlanQJsonVaueRef : mealPlanArray)//for each meal plan in meal plan array
+        {
+            if(!mealPlanQJsonVaueRef.isObject()) continue;
+            QJsonObject mealPlanObj = mealPlanQJsonVaueRef.toObject();
+            MealPlan* currentPlan = new MealPlan(mealPlanObj["title"].toString(),
+                                                 QDate::fromString(mealPlanObj["startDate"].toString()),
+                                                 QDate::fromString(mealPlanObj["endDate"].toString()));
+            QStringList keys = mealPlanObj.keys();
+
+            for(int i = 0; i < mealPlanObj.size(); i++)//for each recipe in mealPlan
+            {
+                QDate testDate = QDate::fromString(keys[i]);
+                if(!testDate.isValid())continue;
+                QString recipeDate = testDate.toString();
+                QJsonArray recipeListOBJ = mealPlanObj[keys[i]].toArray();
+                for(auto recipe : recipeListOBJ){
+                    QJsonObject recipeOBJ = recipe.toObject();
+                    if (recipeOBJ.contains("ingredients")) {
+                        QJsonArray ingredientsArray = recipeOBJ["ingredients"].toArray();
+
+                        ingredientVector = new std::vector<recipe::recipeIngredientStruct*>;
+
+                        //qDebug() << "Ingredients:";
+                        for (const QJsonValue &ingredientValue : ingredientsArray) {
+                            if (!ingredientValue.isObject()) continue;
+                            QJsonObject ingredientObj = ingredientValue.toObject();
+
+                            ingredientStruct = new recipe::recipeIngredientStruct;
+
+                            QString ingredientName = ingredientObj["name"].toString();
+                            ingredientStruct->ingredient = ingredientName;
+
+                            double quantity = ingredientObj["quantity"].toDouble();
+                            ingredientStruct->amount = quantity;
+
+                            QString unit = ingredientObj["unit"].toString();
+                            ingredientStruct->units = unit;
+
+                            ingredientVector->push_back(ingredientStruct);
+                        }
+                        class recipe* newRecipe = new class recipe(recipeOBJ["recipeID"].toInt(),
+                                                       QUrl(recipeOBJ["recipeURL"].toString()), recipeOBJ["title"].toString(),
+                                                       ingredientVector, recipeOBJ["servings"].toInt(),
+                                                       recipeOBJ["calories"].toDouble(), QUrl(recipeOBJ["imageURL"].toString()),
+                                                       recipeOBJ["description"].toString());
+
+                        currentPlan->addRecipe(QDate::fromString(recipeDate), newRecipe);
+                    }
+                }
+
+            }
+
+            this->mealPlans.push_back(currentPlan);
+            this->ui->mealPlanSelect->addItem(currentPlan->getName(), QVariant::fromValue(currentPlan));
+        }
+    }
 
 }
 
 void MainWindow::saveDatatoJson()
 {
-    QJsonObject* recipeOBJ = new QJsonObject;
-    class recipe* currentRecipe;
+    QJsonObject* recipeOBJ;
     QJsonArray recipes;
     QJsonArray savedData;
     QJsonArray ingredients;
@@ -269,42 +346,43 @@ void MainWindow::saveDatatoJson()
     if(this->savedRecipes != nullptr){
         for(unsigned long i = 0; i < this->savedRecipes->size(); i++)
         {
-            currentRecipe = (*this->savedRecipes)[i];
-            (*recipeOBJ)["title"] = currentRecipe->title;
-            (*recipeOBJ)["recipeID"] = currentRecipe->recipeID;
-            (*recipeOBJ)["recipeURL"] = currentRecipe->recipeURL.toString();
-            (*recipeOBJ)["servings"] = currentRecipe->servings;
-            (*recipeOBJ)["calories"] = currentRecipe->calories;
-            (*recipeOBJ)["imageURL"] = currentRecipe->imageURL.toString();
-            (*recipeOBJ)["description"] = currentRecipe->description;
-            for(unsigned long j = 0; j < currentRecipe->ingredients->size(); j++)
-            {
-                ingredients.append(QJsonObject{{"quantity", (*(*currentRecipe->ingredients)[j]).amount},
-                                                {"unit", (*(*currentRecipe->ingredients)[j]).units},
-                                                {"name", (*(*currentRecipe->ingredients)[j]).ingredient }});
-            }
-            (*recipeOBJ)["ingredients"] = ingredients;
-            while(ingredients.count()) {//remove all elements fro next interation
-                ingredients.pop_back();
-            }
+            recipeOBJ = (*savedRecipes)[i]->makeRecipeObject();
             recipes.append(*recipeOBJ);
         }
         savedData.append(recipes);
-    }
-    MealPlan currentPlan;
-    QJsonArray mealPlans;
-    QJsonObject* mealPlanObj = new QJsonObject;
-    if(this->mealPlans.size())
-    {
-        for(unsigned long i = 0; i < mealPlans.size(); i++)
-        {
-            currentPlan = this->mealPlans[i];
-            (*mealPlanObj)["title"] = currentPlan.getName();
-            (*mealPlanObj)["startDate"] = currentPlan.getStartDate().toString();
-            (*mealPlanObj)["endDate"] = currentPlan.getEndDate().toString();
-            mealPlans.append(*mealPlanObj);
+        while(recipes.count()) {//remove all elements for next meal plans
+            recipes.pop_back();
         }
     }
+    MealPlan* currentPlan;
+    QJsonArray mealPlans;
+    QJsonObject mealPlanInfo;
+    if(this->mealPlans.size() != 0)
+    {
+        for(unsigned long i = 0; i <this->mealPlans.size(); i++)//for all meal plans
+        {
+            currentPlan = this->mealPlans[i];
+            (mealPlanInfo)["title"] = currentPlan->getName();
+            (mealPlanInfo)["startDate"] = currentPlan->getStartDate().toString();
+            (mealPlanInfo)["endDate"] = currentPlan->getEndDate().toString();
+            auto& currentHashTable = this->mealPlans[i]->mealPlan;
+            for(auto& hashValue : *currentHashTable)//for all days in those meal plans
+            {
+                if(hashValue.second.size() == 0) continue;
+                for(auto& currentRecipe : hashValue.second){//for all recipes in those days
+                    recipeOBJ = currentRecipe->makeRecipeObject();
+                    recipes.append(*recipeOBJ);
+                }
+                mealPlanInfo[QString::fromStdString(hashValue.first.toStdString())] = recipes;
+                recipes = QJsonArray();
+                delete recipeOBJ;
+                recipeOBJ = new QJsonObject;
+            }
+            mealPlans.append(mealPlanInfo);
+            mealPlanInfo = QJsonObject();
+        }
+    }
+    savedData.append(mealPlans);
     QJsonDocument jsonDoc(savedData);
 
     QFile file("data.json");
@@ -320,10 +398,7 @@ void MainWindow::saveDatatoJson()
     qDebug() << "JSON file saved successfully at:" << QFileInfo(file).absoluteFilePath();
 
     delete recipeOBJ;
-    delete mealPlanObj;
-
 }
-
 void MainWindow::addSavedRecipesToList()
 {
     ui->savedRecipesList->clear();
@@ -462,7 +537,6 @@ void MainWindow::on_deleteSavedRecipesButton_clicked()
         QListWidgetItem* deletedItem = deletedItems[0];
         QVariant data = deletedItem->data(Qt::UserRole);
         selectedRecipe = data.value<recipe*>();
-        QString titleToRemove = QString(selectedRecipe->title);
         for (auto it = savedRecipes->begin(); it != savedRecipes->end();) {
             if (recipeToDelete == *it) {
                 delete *it;  // Free memory before erasing
@@ -474,16 +548,14 @@ void MainWindow::on_deleteSavedRecipesButton_clicked()
                 ++it;
             }
         }
-
     }
-    else return; //if no item selected return
-
 }
 
 
 void MainWindow::on_savedRecipeName_textChanged(const QString &arg1)
 {
     this->selectedRecipe->title = arg1;
+    addSavedRecipesToList();
 }
 
 
@@ -549,5 +621,98 @@ void MainWindow::on_cloneSavedRecipeButton_clicked()
 void MainWindow::on_searchSavedRecipesBox_textChanged(const QString &arg1)
 {
     updateSavedRecipesListWithSearch(arg1.toUpper());
+}
+
+
+void MainWindow::on_tabWidget_tabBarClicked(int index)
+{
+    if(index == 2)//if meal plan tab is selected
+    {
+        updateMealPlanLists();
+    }
+}
+
+void MainWindow::updateMealPlanLists(){
+    ui->mealPlanRecipesList->clear();
+    for (recipe* r : (*this->savedRecipes))
+    {
+        QListWidgetItem* item = new QListWidgetItem(r->title, this->ui->mealPlanRecipesList);
+        item->setData(Qt::UserRole, QVariant::fromValue(r));  // store recipe pointer
+    }
+    if(selectedMealPlan == nullptr) return;
+    ui->mealPlanSelectedDayRecipesList->clear();
+    const auto& second = (*this->selectedMealPlan->mealPlan)[this->ui->mealPlanCalender->selectedDate().toString()];
+    if(second.size() == 0)return;
+        for(recipe* r : second){
+            QListWidgetItem* item = new QListWidgetItem(r->title, this->ui->mealPlanSelectedDayRecipesList);
+            item->setData(Qt::UserRole, QVariant::fromValue(r));  // store recipe pointer
+        }
+
+}
+void MainWindow::on_mealPlanAddRecipeButton_clicked()
+{
+    if(selectedRecipe == nullptr) return;
+    this->selectedMealPlan->addRecipe(this->ui->mealPlanCalender->selectedDate(), selectedRecipe->clone());
+    updateMealPlanLists();
+}
+
+
+void MainWindow::on_mealPlanRecipesList_itemClicked(QListWidgetItem *item)
+{
+    QVariant data = item->data(Qt::UserRole);
+    selectedRecipe = data.value<recipe*>();
+}
+
+
+void MainWindow::on_mealPlanCalender_selectionChanged()
+{
+    updateMealPlanLists();
+}
+
+
+void MainWindow::on_mealPlanRemoveRecipeButton_clicked()
+{
+    this->selectedMealPlan->removeRecipe(this->ui->mealPlanCalender->selectedDate(), selectedRecipe);
+    updateMealPlanLists();
+}
+
+
+
+
+void MainWindow::on_mealPlanSelectedDayRecipesList_itemClicked(QListWidgetItem *item)
+{
+    QVariant data = item->data(Qt::UserRole);
+    selectedRecipe = data.value<recipe*>();
+}
+
+
+void MainWindow::on_mealPlanSelectedDayRecipesList_itemActivated(QListWidgetItem *item)
+{
+
+}
+
+
+void MainWindow::on_mealPlanDeleteButton_clicked()
+{
+    QVariant data = ui->mealPlanSelect->currentData();
+    MealPlan* deletedMealPlan = qvariant_cast<MealPlan*>(data);
+    auto it = std::find(this->mealPlans.begin(), this->mealPlans.end(), deletedMealPlan);
+
+    int indexOfDeletedItem = std::distance(this->mealPlans.begin(), it);
+    this->mealPlans.erase(this->mealPlans.begin() + indexOfDeletedItem);
+    this->mealPlans.shrink_to_fit();
+    this->ui->mealPlanSelect->removeItem(this->ui->mealPlanSelect->currentIndex());
+}
+
+
+void MainWindow::on_savedRecipeName_textEdited(const QString &arg1)
+{
+
+}
+
+
+void MainWindow::on_recipeSearchbox_cursorPositionChanged(int arg1, int arg2)
+{
+
 }
 

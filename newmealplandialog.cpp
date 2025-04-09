@@ -1,7 +1,7 @@
 #include "newmealplandialog.h"
 #include "ui_newmealplandialog.h"
 
-NewMealPlanDialog::NewMealPlanDialog(QWidget *parent)
+NewMealPlanDialog::NewMealPlanDialog(QWidget *parent)//mode = 0 for user mode = 1 for system
     : QDialog(parent)
     , ui(new Ui::NewMealPlanDialog)
 {
@@ -25,3 +25,9 @@ QDate NewMealPlanDialog::getStartDate() const {
 QDate NewMealPlanDialog::getEndDate() const {
     return ui->dateEdit_2->date();
 }
+
+void NewMealPlanDialog::on_buttonBox_accepted()
+{
+    this->name = this->ui->lineEdit->text();
+}
+
