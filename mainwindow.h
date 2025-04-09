@@ -113,6 +113,10 @@ private slots:
 
     void on_mealPlanDeleteButton_clicked();
 
+    void on_savedRecipeName_textEdited(const QString &arg1);
+
+    void on_recipeSearchbox_cursorPositionChanged(int arg1, int arg2);
+
 private:
     Ui::MainWindow *ui;
     recipe* selectedRecipe = nullptr;
@@ -129,6 +133,7 @@ private:
 
     void addSavedRecipesToList();
     void updateSavedRecipesListWithSearch(QString search);
+    void updateSearchResultList();
 protected:
     void closeEvent(QCloseEvent *event) override;
 

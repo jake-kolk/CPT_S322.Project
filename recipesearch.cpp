@@ -1,12 +1,13 @@
 #include "recipesearch.h"
 
-std::vector<recipe*>* recipeSearch::makeRequest(QString cuisine, std::vector<QString> ingredients, QString diet, QString mealType, int NumRecipes, QString searchQuery) {
+std::vector<recipe*>* recipeSearch::makeRequest(QString cuisine, std::vector<QString> ingredients, QString diet, QString mealType, int NumRecipes, QString searchQuery, QString sort) {
     QUrl url("https://api.spoonacular.com/recipes/complexSearch");
     //https://api.spoonacular.com/recipes/complexSearch
     QUrlQuery query;
 
     query.addQueryItem("apiKey", this->ApiKey);
     query.addQueryItem("number", QString::number(NumRecipes));  // Request multiple recipes
+    if(sort != "") query.addQueryItem("sort", sort);
     query.addQueryItem("addRecipeInformation", "true");
     query.addQueryItem("addRecipeNutrition", "true");
     query.addQueryItem("addRecipeInstructions", "true");

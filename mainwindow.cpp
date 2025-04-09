@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     qDebug() << "Loading json data...\n";
+    //get saved recipes
     this->savedRecipes = new std::vector<recipe*>;
     loadDataFromJson("data.json"); // QString("") means default location
     addSavedRecipesToList();
@@ -27,6 +28,18 @@ MainWindow::MainWindow(QWidget *parent)
     this->ui->cuisineComboBox->addItems(cuisines);
     this->ui->dietComboBox->addItems(diets);
     this->ui->mealTypeComboBox->addItems(types);
+
+    //set up search page to display popular recipes on start up
+    recipeSearch searchEngine(this->APIKEY);
+    std::vector<QString> ingredients = {};
+    std::vector<recipe*>* results = searchEngine.makeRequest("", ingredients, "", "", 20, "", QString("popularity"));
+    foundRecipes = results;
+    this->ui->searchResultListLabel->setText("Popular With Users");
+    if(this->foundRecipes->size() != 0) selectedRecipe = (*this->foundRecipes)[0];
+    updateSearchResultList();
+    if(this->ui->searchResult->count() > 0)on_searchResult_itemClicked(this->ui->searchResult->item(0));
+
+    //set up meal plan combo box
     if(!mealPlans.empty())this->selectedMealPlan = mealPlans[0];
     updateMealPlanLists();
 }
@@ -36,13 +49,23 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::updateSearchResultList()
+{
+    ui->searchResult->clear();//update search list
+    for (recipe* r : *(this->foundRecipes))
+    {
+        QListWidgetItem* item = new QListWidgetItem(r->title, ui->searchResult);
+        item->setData(Qt::UserRole, QVariant::fromValue(r));  // store recipe pointer
+    }
+}
 
 void MainWindow::on_searchButton_clicked()
 {
+    this->ui->searchResultListLabel->setText("Search Results");
     qDebug() << "Search Button Clicked";
     QString search = ui->recipeSearchbox->text();
     recipeSearch searchEngine(this->APIKEY);
-
+    this->ui->recipeSearchbox->setPlaceholderText("Search for Recipes");
 
     std::vector<QString> ingredients = {};  // search by ingredient, temp stuff in the now for proof of concept
 
@@ -66,15 +89,8 @@ void MainWindow::on_searchButton_clicked()
     {
         query = this->ui->recipeSearchbox->text();
     }
-    std::vector<recipe*>* results = searchEngine.makeRequest(cuisine, ingredients, diet, mealType, 20, query);
-
-    ui->searchResult->clear();//update search list
-    for (recipe* r : *results)
-    {
-        QListWidgetItem* item = new QListWidgetItem(r->title, ui->searchResult);
-        item->setData(Qt::UserRole, QVariant::fromValue(r));  // store recipe pointer
-    }
-    this->foundRecipes = results;
+    foundRecipes = searchEngine.makeRequest(cuisine, ingredients, diet, mealType, 20, query);
+    updateSearchResultList();
 }
 
 void MainWindow::on_item_clicked()
@@ -539,6 +555,7 @@ void MainWindow::on_deleteSavedRecipesButton_clicked()
 void MainWindow::on_savedRecipeName_textChanged(const QString &arg1)
 {
     this->selectedRecipe->title = arg1;
+    addSavedRecipesToList();
 }
 
 
@@ -685,5 +702,17 @@ void MainWindow::on_mealPlanDeleteButton_clicked()
     this->mealPlans.erase(this->mealPlans.begin() + indexOfDeletedItem);
     this->mealPlans.shrink_to_fit();
     this->ui->mealPlanSelect->removeItem(this->ui->mealPlanSelect->currentIndex());
+}
+
+
+void MainWindow::on_savedRecipeName_textEdited(const QString &arg1)
+{
+
+}
+
+
+void MainWindow::on_recipeSearchbox_cursorPositionChanged(int arg1, int arg2)
+{
+
 }
 
