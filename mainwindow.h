@@ -23,6 +23,7 @@
 #include "mealplan.h"
 #include "newmealplandialog.h"
 #include "mealplan.h"
+#include "grocerylist.h"
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -38,6 +39,8 @@ public:
     ~MainWindow();
     void loadDataFromJson(QString filePath="data.json");//filepath should not be included unless user tried to load from non default filepath
     MealPlan* selectedMealPlan;
+    groceryList* selectedGroceryList;
+    std::vector<groceryList*> groceryLists;
 
 private slots:
 
@@ -117,6 +120,10 @@ private slots:
 
     void on_recipeSearchbox_cursorPositionChanged(int arg1, int arg2);
 
+    void on_groceryIngredientsTable_cellChanged(int row, int column);
+
+    void on_addIngredientButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     recipe* selectedRecipe = nullptr;
@@ -134,6 +141,8 @@ private:
     void addSavedRecipesToList();
     void updateSavedRecipesListWithSearch(QString search);
     void updateSearchResultList();
+    void updateGroceryListItems();
+    void updateGroceryListList();
 protected:
     void closeEvent(QCloseEvent *event) override;
 

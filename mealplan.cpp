@@ -1,38 +1,16 @@
 #include "mealplan.h"
 
-MealPlan::MealPlan() {}
-
-MealPlan::MealPlan(const QString &name, const QDate &startDate, const QDate &endDate)
-    : name(name), startDate(startDate), endDate(endDate) {
-    this->mealPlan = new std::unordered_map<QString,std::vector<recipe*>>;
-}
-
 QString MealPlan::getName() const {
     return name;
 }
 
 MealPlan::MealPlan(QString name){
     this->name = name;
+    this->mealPlan = new std::unordered_map<QString,std::vector<recipe*>>;
 }
 
 void MealPlan::setName(const QString &name) {
     this->name = name;
-}
-
-QDate MealPlan::getStartDate() const {
-    return startDate;
-}
-
-void MealPlan::setStartDate(const QDate &startDate) {
-    this->startDate = startDate;
-}
-
-QDate MealPlan::getEndDate() const {
-    return endDate;
-}
-
-void MealPlan::setEndDate(const QDate &endDate) {
-    this->endDate = endDate;
 }
 
 recipe* MealPlan::getRecipesAt(QDate date){
@@ -40,6 +18,7 @@ recipe* MealPlan::getRecipesAt(QDate date){
 }
 
 void MealPlan::addRecipe(QDate date, recipe* r){
+    if(this->mealPlan == nullptr) return;
     (*this->mealPlan)[date.toString()].push_back(r);
 }
 

@@ -11,6 +11,8 @@ CONFIG += c++17
 
 SOURCES += \
     addapikeydialog.cpp \
+    addingredient.cpp \
+    grocerylist.cpp \
     main.cpp \
     mainwindow.cpp \
     mealplan.cpp \
@@ -20,6 +22,8 @@ SOURCES += \
 
 HEADERS += \
     addapikeydialog.h \
+    addingredient.h \
+    grocerylist.h \
     mainwindow.h \
     mealplan.h \
     newmealplandialog.h \
@@ -29,6 +33,7 @@ HEADERS += \
 
 FORMS += \
     addapikeydialog.ui \
+    addingredient.ui \
     mainwindow.ui \
     newmealplandialog.ui
 

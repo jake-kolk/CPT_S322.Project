@@ -4,6 +4,7 @@
 #include "addapikeydialog.h"
 #include "mealplan.h"
 #include "newmealplandialog.h"
+#include "addingredient.h"
 #include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -14,8 +15,10 @@ MainWindow::MainWindow(QWidget *parent)
     qDebug() << "Loading json data...\n";
     //get saved recipes
     this->savedRecipes = new std::vector<recipe*>;
+    this->groceryLists = std::vector<groceryList*>();
     loadDataFromJson("data.json"); // QString("") means default location
     addSavedRecipesToList();
+
 
     //set combox box option for search filters
     QStringList cuisines =     {"All Cuisines", "African", "Asian", "American", "British", "Cajun", "Caribbean", "Chinese", "Eastern European", "European",
@@ -39,9 +42,24 @@ MainWindow::MainWindow(QWidget *parent)
     updateSearchResultList();
     if(this->ui->searchResult->count() > 0)on_searchResult_itemClicked(this->ui->searchResult->item(0));
 
-    //set up meal plan combo box
-    if(!mealPlans.empty())this->selectedMealPlan = mealPlans[0];
+    //set up meal plan + meal plan combo box
+    if(this->mealPlans.size() == 0)
+    {
+        this->mealPlans.push_back(new MealPlan("default"));
+        this->selectedMealPlan = mealPlans[0];
+    }
+
     updateMealPlanLists();
+
+    //set up grocery lists
+
+    /*
+    this->groceryLists.push_back(new groceryList("listDawg"));
+    this->selectedGroceryList = this->groceryLists[0];
+    this->selectedGroceryList->addItem(3, "pounds", "grapes");
+    */
+    updateGroceryListList();
+    updateGroceryListItems();
 }
 
 MainWindow::~MainWindow()
@@ -98,20 +116,95 @@ void MainWindow::on_item_clicked()
 
 }
 
-void MainWindow::on_addGrocery_clicked()
+void MainWindow::on_addGrocery_clicked()//add grocery list
 {
-
+    NewMealPlanDialog dialog(this);
+    if (dialog.exec() == QDialog::Accepted) {
+        QString name = dialog.getName();
+        if (!name.isEmpty()) {
+            this->groceryLists.push_back(new groceryList(name));
+            this->ui->grocerySelect->setCurrentIndex(groceryLists.size() - 1);
+     } else {
+            QMessageBox::warning(this, "Empty Name", "Please enter a meal plan name.");
+        }
+    }
+    updateGroceryListList();
+    updateGroceryListItems();
 }
 
+void MainWindow::updateGroceryListItems()
+{
 
+    QTableWidgetItem* item;
+    this->ui->groceryIngredientsTable->clear();
+    this->ui->groceryIngredientsTable->setRowCount(0);
+    if(this->selectedGroceryList == nullptr)return;
+    if(this->groceryLists.size() == 0)return;
+    if(this->selectedGroceryList->ingredients == nullptr) return;
+    for(auto ingredient : *this->selectedGroceryList->ingredients){//for every ingredient in the selected ingredient vector
+        int lastRow = 0;
+        this->ui->groceryIngredientsTable->insertRow(lastRow);//insert row at bottom
+
+        item = new QTableWidgetItem(QString::number(ingredient->amount));
+        item->setData(Qt::UserRole, QVariant::fromValue(&(ingredient->amount)));
+        this->ui->groceryIngredientsTable->setItem(lastRow, 0, item);
+
+        item = new QTableWidgetItem(ingredient->units);
+        item->setData(Qt::UserRole, QVariant::fromValue(&(ingredient->units)));
+        this->ui->groceryIngredientsTable->setItem(lastRow, 1, item);
+
+        item = new QTableWidgetItem(ingredient->ingredient);
+        item->setData(Qt::UserRole, QVariant::fromValue(&(ingredient->ingredient)));
+        this->ui->groceryIngredientsTable->setItem(lastRow, 2, item);
+    }
+}
+
+void MainWindow::updateGroceryListList()
+{
+    this->ui->grocerySelect->clear();
+    for (groceryList* g : this->groceryLists)
+    {
+        this->ui->grocerySelect->addItem(g->name, QVariant::fromValue(g));
+    }
+    int i = this->ui->grocerySelect->findData(QVariant::fromValue(this->selectedRecipe));
+    if(i != -1) this->ui->grocerySelect->setCurrentIndex(i);
+    else if(this->ui->grocerySelect->count() > 0)
+    {
+        this->ui->grocerySelect->setCurrentIndex(0);
+        this->selectedGroceryList = qvariant_cast<groceryList*>(this->ui->grocerySelect->currentData());
+    }else this->selectedGroceryList = nullptr;
+}
 void MainWindow::on_removeGrocery_clicked()
 {
+    QVariant data = ui->grocerySelect->currentData();
+    groceryList* deletedMealPlan = qvariant_cast<groceryList*>(data);
+    auto it = std::find(this->groceryLists.begin(), this->groceryLists.end(), deletedMealPlan);
+
+    int indexOfDeletedItem = std::distance(this->groceryLists.begin(), it);
+    this->groceryLists.erase(this->groceryLists.begin() + indexOfDeletedItem);
+    this->groceryLists.shrink_to_fit();
+    this->ui->grocerySelect->removeItem(this->ui->grocerySelect->currentIndex());
+    if(this->ui->grocerySelect->count() == 0)//if list is empty clear calendar
+    {
+        this->selectedMealPlan = nullptr;
+        updateGroceryListList();
+        updateGroceryListItems();
+    }
+    else{//if meal plan list not empty get new seleced list
+        QVariant data = ui->grocerySelect->currentData();
+        groceryList* newlySelectedList = qvariant_cast<groceryList*>(data);
+        this->selectedGroceryList = newlySelectedList;
+        updateGroceryListList();
+        updateGroceryListItems();
+    }
 
 }
 
 void MainWindow::on_grocerySelect_currentIndexChanged(int index)
 {
-
+    QVariant data = ui->grocerySelect->itemData(index);
+    this->selectedGroceryList = qvariant_cast<groceryList*>(data);
+    updateGroceryListItems();
 }
 
 
@@ -126,11 +219,8 @@ void MainWindow::on_mealPlanNewButton_clicked()
     NewMealPlanDialog dialog(this);
     if (dialog.exec() == QDialog::Accepted) {
         QString name = dialog.getName();
-        QDate startDate = dialog.getStartDate();
-        QDate endDate = dialog.getEndDate();
-
         if (!name.isEmpty()) {
-            MealPlan* plan = new MealPlan(name, startDate, endDate);
+            MealPlan* plan = new MealPlan(name);
             mealPlans.push_back(plan);
             ui->mealPlanSelect->addItem(name, QVariant::fromValue(plan));
             ui->mealPlanSelect->setCurrentIndex(this->ui->mealPlanSelect->count() - 1);
@@ -139,7 +229,7 @@ void MainWindow::on_mealPlanNewButton_clicked()
             QMessageBox::warning(this, "Empty Name", "Please enter a meal plan name.");
         }
     }
-
+    this->ui->grocerySelect->setCurrentIndex(this->ui->grocerySelect->count()-1);
 }
 
 void MainWindow::on_saveRecipeButton_clicked()
@@ -277,9 +367,7 @@ void MainWindow::loadDataFromJson(QString filepath)
         {
             if(!mealPlanQJsonVaueRef.isObject()) continue;
             QJsonObject mealPlanObj = mealPlanQJsonVaueRef.toObject();
-            MealPlan* currentPlan = new MealPlan(mealPlanObj["title"].toString(),
-                                                 QDate::fromString(mealPlanObj["startDate"].toString()),
-                                                 QDate::fromString(mealPlanObj["endDate"].toString()));
+            MealPlan* currentPlan = new MealPlan(mealPlanObj["title"].toString());
             QStringList keys = mealPlanObj.keys();
 
             for(int i = 0; i < mealPlanObj.size(); i++)//for each recipe in mealPlan
@@ -329,6 +417,14 @@ void MainWindow::loadDataFromJson(QString filepath)
             this->ui->mealPlanSelect->addItem(currentPlan->getName(), QVariant::fromValue(currentPlan));
         }
     }
+    if(rootArray.size() > 2 && rootArray[3].isArray())
+    {
+        QJsonArray groceryListArray = rootArray[3].toArray();
+        for(auto list : groceryListArray){
+            this->groceryLists.push_back(new groceryList(list.toObject()));
+        }
+        if(this->groceryLists.size() > 0) this->selectedGroceryList = this->groceryLists[0];
+    }
 
 }
 
@@ -363,8 +459,6 @@ void MainWindow::saveDatatoJson()
         {
             currentPlan = this->mealPlans[i];
             (mealPlanInfo)["title"] = currentPlan->getName();
-            (mealPlanInfo)["startDate"] = currentPlan->getStartDate().toString();
-            (mealPlanInfo)["endDate"] = currentPlan->getEndDate().toString();
             auto& currentHashTable = this->mealPlans[i]->mealPlan;
             for(auto& hashValue : *currentHashTable)//for all days in those meal plans
             {
@@ -383,6 +477,14 @@ void MainWindow::saveDatatoJson()
         }
     }
     savedData.append(mealPlans);
+
+    QJsonArray groceryLists;
+    for(auto lists : this->groceryLists)
+    {
+        groceryLists.append(*lists->makeListObject());
+    }
+    savedData.append(groceryLists);
+
     QJsonDocument jsonDoc(savedData);
 
     QFile file("data.json");
@@ -413,7 +515,7 @@ void MainWindow::addSavedRecipesToList()
 void MainWindow::updateSavedRecipesListWithSearch(QString search)
 {
     ui->savedRecipesList->clear();
-    for (recipe* r : (*this->savedRecipes))
+    for (recipe* r : (*this->savedRecipes))//there is an issue here not saving to the list proply, when I do to delete it crashes on loading recipe from list
     {
         if(r == nullptr) return;
         if(r->title.toUpper().contains(search)){
@@ -434,20 +536,21 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 void MainWindow::on_savedRecipesList_itemClicked(QListWidgetItem *item)
 {
     QVariant data = item->data(Qt::UserRole);
-    selectedRecipe = data.value<recipe*>();  // Store selected recipe
-
+    this->selectedRecipe = data.value<recipe*>();  // Store selected recipe
     if (selectedRecipe)
     {
+
         ui->savedRecipeName->setText(selectedRecipe->title);
+
         ui->savedRecipeDesc->setText(selectedRecipe->description);
 
         // testing
         ui->savedRecipeURL->setText(selectedRecipe->recipeURL.toString());
         ui->savedRecipeServings->setText(QString::number(selectedRecipe->servings));
         ui->savedRecipeCalPerSevings->setText(QString::number(selectedRecipe->calories));
-
-        //ui->recipeImage->scene()->clear();
+        //ui->savedRecipeImage->scene()->clear();//this causes crashes for some reason, idk
         QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+
         QUrl imageUrl(selectedRecipe->imageURL.toString());
 
         QNetworkReply *reply = manager->get(QNetworkRequest(imageUrl));
@@ -466,17 +569,20 @@ void MainWindow::on_savedRecipesList_itemClicked(QListWidgetItem *item)
             }
             reply->deleteLater();
         });
+
         ui->savedRecipeIngredientTable->setRowCount(0); //reset table
         for (auto* ingredient : *(selectedRecipe->ingredients)) {
             int row = ui->savedRecipeIngredientTable->rowCount();
-            ui->savedRecipeIngredientTable->insertRow(row);
+            ui->recipeIngredientTable->insertRow(row);
 
 
             ui->savedRecipeIngredientTable->setItem(row, 0, new QTableWidgetItem(QString::number(ingredient->amount)));
             ui->savedRecipeIngredientTable->setItem(row, 1, new QTableWidgetItem(ingredient->units));
             ui->savedRecipeIngredientTable->setItem(row, 2, new QTableWidgetItem(ingredient->ingredient));
         }
+
     }
+
 }
 
 
@@ -530,6 +636,7 @@ void MainWindow::on_searchResult_itemClicked(QListWidgetItem *item)
 void MainWindow::on_deleteSavedRecipesButton_clicked()
 {
     QList<QListWidgetItem*> deletedItems = this->ui->savedRecipesList->selectedItems();
+    if(deletedItems.size() == 0) return;
     recipe* recipeToDelete = deletedItems[0]->data(Qt::UserRole).value<recipe*>();
     qDebug() << "Found " << deletedItems.size() << " item(s) to delete";
     if(deletedItems.size() != 0)
@@ -555,7 +662,8 @@ void MainWindow::on_deleteSavedRecipesButton_clicked()
 void MainWindow::on_savedRecipeName_textChanged(const QString &arg1)
 {
     this->selectedRecipe->title = arg1;
-    addSavedRecipesToList();
+    //find selected recipe in list and change it
+    this->ui->savedRecipesList->selectedItems()[0]->setText(arg1);
 }
 
 
@@ -639,8 +747,8 @@ void MainWindow::updateMealPlanLists(){
         QListWidgetItem* item = new QListWidgetItem(r->title, this->ui->mealPlanRecipesList);
         item->setData(Qt::UserRole, QVariant::fromValue(r));  // store recipe pointer
     }
-    if(selectedMealPlan == nullptr) return;
     ui->mealPlanSelectedDayRecipesList->clear();
+    if(selectedMealPlan == nullptr) return;//if list if empty, leave clear list, if not populate list
     const auto& second = (*this->selectedMealPlan->mealPlan)[this->ui->mealPlanCalender->selectedDate().toString()];
     if(second.size() == 0)return;
         for(recipe* r : second){
@@ -652,7 +760,7 @@ void MainWindow::updateMealPlanLists(){
 void MainWindow::on_mealPlanAddRecipeButton_clicked()
 {
     if(selectedRecipe == nullptr) return;
-    this->selectedMealPlan->addRecipe(this->ui->mealPlanCalender->selectedDate(), selectedRecipe->clone());
+    this->selectedMealPlan->addRecipe(this->ui->mealPlanCalender->selectedDate(), selectedRecipe);
     updateMealPlanLists();
 }
 
@@ -702,6 +810,17 @@ void MainWindow::on_mealPlanDeleteButton_clicked()
     this->mealPlans.erase(this->mealPlans.begin() + indexOfDeletedItem);
     this->mealPlans.shrink_to_fit();
     this->ui->mealPlanSelect->removeItem(this->ui->mealPlanSelect->currentIndex());
+    if(this->ui->mealPlanSelect->count() == 0)//if list is empty clear calendar
+    {
+        this->selectedMealPlan = nullptr;
+        updateMealPlanLists();
+    }
+    else{//if meal plan list not empty get new seleced list
+        QVariant data = ui->mealPlanSelect->currentData();
+        MealPlan* newlySelectedMealPlan = qvariant_cast<MealPlan*>(data);
+        this->selectedMealPlan = newlySelectedMealPlan;
+        updateMealPlanLists();
+    }
 }
 
 
@@ -714,5 +833,39 @@ void MainWindow::on_savedRecipeName_textEdited(const QString &arg1)
 void MainWindow::on_recipeSearchbox_cursorPositionChanged(int arg1, int arg2)
 {
 
+}
+
+
+void MainWindow::on_groceryIngredientsTable_cellChanged(int row, int column)
+{
+    if(column == 0)//amount is double*
+    {
+        QTableWidgetItem* t = this->ui->groceryIngredientsTable->currentItem();
+        if(t == nullptr) return;
+        double* value = reinterpret_cast<double*>(t->data(Qt::UserRole).data());
+        qDebug() << "double is: " << *value;
+        *value = this->ui->groceryIngredientsTable->currentItem()->text().toDouble();
+        qDebug() << "double changed to " << *value;
+    }
+    else if(column == 1 || column == 2)
+    {
+        QTableWidgetItem* t = this->ui->groceryIngredientsTable->currentItem();
+        if(t == nullptr) return;
+        QString* value = reinterpret_cast<QString*>(t->data(Qt::UserRole).data());
+        *value = this->ui->groceryIngredientsTable->currentItem()->text();
+        qDebug() << "Qstring changed to " << *value;
+    }
+
+}
+
+
+void MainWindow::on_addIngredientButton_clicked()
+{
+    addIngredient dialog(this);
+    if (dialog.exec() == QDialog::Accepted) {
+        recipe::recipeIngredientStruct* ingredient = dialog.getIngredientStruct();
+        this->selectedGroceryList->addItem(ingredient);
+    }
+    updateGroceryListItems();
 }
 
