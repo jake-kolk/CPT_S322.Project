@@ -19,6 +19,9 @@
 #include <QCloseEvent>
 #include <QFileInfo>
 #include <QTableWidgetItem>
+#include <QGraphicsScene>
+#include <QGraphicsOpacityEffect>
+#include <QPropertyAnimation>
 #include "recipe.h"
 #include "mealplan.h"
 #include "newmealplandialog.h"
@@ -33,7 +36,6 @@ QT_END_NAMESPACE
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
@@ -43,6 +45,8 @@ public:
     std::vector<groceryList*> groceryLists;
 
 private slots:
+
+    void setProgressBarProgress(bool visability, int progress);
 
     void on_addGrocery_clicked();
 
@@ -123,6 +127,10 @@ private slots:
     void on_groceryIngredientsTable_cellChanged(int row, int column);
 
     void on_addIngredientButton_clicked();
+
+    void on_recipeAddIngredientButton_clicked();
+
+    void on_savedRecipeAddIngredientButton_clicked();
 
 private:
     Ui::MainWindow *ui;

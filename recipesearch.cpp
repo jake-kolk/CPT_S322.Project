@@ -1,9 +1,12 @@
 #include "recipesearch.h"
 
-std::vector<recipe*>* recipeSearch::makeRequest(QString cuisine, std::vector<QString> ingredients, QString diet, QString mealType, int NumRecipes, QString searchQuery, QString sort) {
+std::vector<recipe*>* recipeSearch::makeRequest(QString cuisine, std::vector<QString> ingredients, QString diet, QString mealType, int NumRecipes, QString searchQuery, QProgressBar *progressBar, QString sort) {
     QUrl url("https://api.spoonacular.com/recipes/complexSearch");
     //https://api.spoonacular.com/recipes/complexSearch
     QUrlQuery query;
+
+    progressBar->setVisible(true);
+    progressBar->setValue(0);
 
     query.addQueryItem("apiKey", this->ApiKey);
     query.addQueryItem("number", QString::number(NumRecipes));  // Request multiple recipes
@@ -22,10 +25,14 @@ std::vector<recipe*>* recipeSearch::makeRequest(QString cuisine, std::vector<QSt
         }
     }
 
+    progressBar->setValue(10);
+
     if (!CSingredients.isEmpty()) {
         CSingredients.chop(1);
         query.addQueryItem("includeIngredients", CSingredients);
     }
+
+    progressBar->setValue(20);
 
     if (!diet.isEmpty()) query.addQueryItem("diet", diet);
     if (!cuisine.isEmpty()) query.addQueryItem("cuisine", cuisine);
@@ -33,10 +40,14 @@ std::vector<recipe*>* recipeSearch::makeRequest(QString cuisine, std::vector<QSt
     if(searchQuery != "") query.addQueryItem("query", searchQuery);
     url.setQuery(query);
 
+    progressBar->setValue(40);
+
     qDebug() << "Query: " << url;
 
     QNetworkRequest request(url);
     qDebug() << "Sending search request for " << NumRecipes << " recipes...";
+
+    progressBar->setValue(50);
 
     QNetworkReply* reply = manager->get(request);  // Expecting multiple recipes
 
@@ -45,11 +56,17 @@ std::vector<recipe*>* recipeSearch::makeRequest(QString cuisine, std::vector<QSt
     connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
     loop.exec();  // Blocks execution until the request is complete
 
+    progressBar->setValue(90);
+
     qDebug() << "Recipe search request received...";
 
     // **Process the response and return recipes**
     std::vector<recipe*>* recipes = handleResponse(reply);
+    progressBar->setValue(100);
     reply->deleteLater();
+
+    progressBar->setVisible(false);
+    progressBar->setValue(0);
 
     return recipes;  // Return all recipes
 }
