@@ -6,6 +6,7 @@
 #include "newmealplandialog.h"
 #include "addingredient.h"
 #include <QMessageBox>
+#include <QTimer>
 #include "ScaledLabel.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -45,12 +46,14 @@ MainWindow::MainWindow(QWidget *parent)
     recipeSearch searchEngine(this->APIKEY);
     std::vector<QString> ingredients = {};
 
+    /*
     std::vector<recipe*>* results = searchEngine.makeRequest("", ingredients, "", "", 20, "", this->ui->progressBar, QString("popularity"));
 
     foundRecipes = results;
     this->ui->searchResultListLabel->setText("Popular With Users");
     if(this->foundRecipes->size() != 0) selectedRecipe = (*this->foundRecipes)[0];
-    updateSearchResultList();
+    updateSearchResultList();*/
+
     //if(this->ui->searchResult->count() > 0)on_searchResult_itemClicked(this->ui->searchResult->item(0));
 
     //set up meal plan + meal plan combo box
@@ -96,6 +99,7 @@ void MainWindow::updateSearchResultList()
 
 void MainWindow::on_searchButton_clicked()
 {
+    QApplication::setOverrideCursor(Qt::WaitCursor);
     this->ui->searchResultListLabel->setText("Search Results");
     qDebug() << "Search Button Clicked";
     QString search = ui->recipeSearchbox->text();
@@ -129,6 +133,7 @@ void MainWindow::on_searchButton_clicked()
 
     this->ui->searchRecipeInfoWidget->setVisible(false);
     this->ui->recipeURL->setVisible(false);
+    QApplication::restoreOverrideCursor();
 }
 
 void MainWindow::on_item_clicked()
@@ -144,6 +149,7 @@ void MainWindow::on_addGrocery_clicked()//add grocery list
         if (!name.isEmpty()) {
             this->groceryLists.push_back(new groceryList(name));
             this->ui->grocerySelect->setCurrentIndex(groceryLists.size() - 1);
+            statusBar()->showMessage("Created New Grocery List", 2000);
      } else {
             QMessageBox::warning(this, "Empty Name", "Please enter a meal plan name.");
         }
@@ -217,6 +223,7 @@ void MainWindow::on_removeGrocery_clicked()
         updateGroceryListList();
         updateGroceryListItems();
     }
+    statusBar()->showMessage("Removed Grocery List", 2000);
 
 }
 
@@ -245,6 +252,7 @@ void MainWindow::on_mealPlanNewButton_clicked()
             ui->mealPlanSelect->addItem(name, QVariant::fromValue(plan));
             ui->mealPlanSelect->setCurrentIndex(this->ui->mealPlanSelect->count() - 1);
             this->selectedMealPlan = plan;
+            statusBar()->showMessage("Created New Meal Plan", 2000);
         } else {
             QMessageBox::warning(this, "Empty Name", "Please enter a meal plan name.");
         }
@@ -258,6 +266,7 @@ void MainWindow::on_saveRecipeButton_clicked()
     if(this->selectedRecipe == nullptr)return;
     this->savedRecipes->push_back(selectedRecipe);
     addSavedRecipesToList();
+    statusBar()->showMessage("Recipe Saved", 2000);
 }
 
 void MainWindow::on_deleteRecipeButton_clicked()
@@ -270,7 +279,8 @@ void MainWindow::on_addAPIKeyButton_triggered()
     addAPIKeyDialog w(this);
     w.exec();
     this->APIKEY = w.getAPIKey();
-    qDebug() << "API key is now: " << this->APIKEY;
+    //qDebug() << "API key is now: " << this->APIKEY;
+    statusBar()->showMessage("API key set", 2000);
 
 
 }
@@ -511,6 +521,7 @@ void MainWindow::saveDatatoJson()
 
     if (!file.open(QIODevice::WriteOnly)) {
         qWarning() << "Could not open file for writing: " << file.errorString();
+        statusBar()->showMessage("Could not open file for writing", 2000);
         return;
     }
 
@@ -518,6 +529,7 @@ void MainWindow::saveDatatoJson()
     file.close();
 
     qDebug() << "JSON file saved successfully at:" << QFileInfo(file).absoluteFilePath();
+    statusBar()->showMessage("JSON file saved successful", 2000);
 
     delete recipeOBJ;
 }
@@ -585,6 +597,7 @@ void MainWindow::on_savedRecipesList_itemClicked(QListWidgetItem *item)
                 ui->savedRecipeImage->setPixmap(scaledPixmap);
              } else {
                  qDebug() << "Failed to load image:" << reply->errorString();
+                 statusBar()->showMessage("Failed to load image", 2000);
              }
              reply->deleteLater();
          });
@@ -635,6 +648,7 @@ void MainWindow::on_searchResult_itemClicked(QListWidgetItem *item)
                 ui->recipeImage->setPixmap(scaledPixmap);
             } else {
                 qDebug() << "Failed to load image:" << reply->errorString();
+                statusBar()->showMessage("Failed to load image", 2000);
             }
             reply->deleteLater();
         });
@@ -668,6 +682,7 @@ void MainWindow::on_deleteSavedRecipesButton_clicked()
                 it = savedRecipes->erase(it);  // Erase returns next valid iterator
                 this->savedRecipes->shrink_to_fit();
                 addSavedRecipesToList();//to update list
+                statusBar()->showMessage("Removed Recipe", 2000);
                 return;
             } else {
                 ++it;
@@ -890,26 +905,48 @@ void MainWindow::on_addIngredientButton_clicked()
 
 void MainWindow::on_recipeAddIngredientButton_clicked()
 {
-    int selectedRow = ui->recipeIngredientTable->currentRow();
-    if (selectedRow != -1) {
-        int row = ui->groceryIngredientsTable->rowCount();
-        ui->groceryIngredientsTable->insertRow(row);
-        ui->groceryIngredientsTable->setItem(row, 0, new QTableWidgetItem(ui->recipeIngredientTable->item(selectedRow, 0)->text()));
-        ui->groceryIngredientsTable->setItem(row, 1, new QTableWidgetItem(ui->recipeIngredientTable->item(selectedRow, 1)->text()));
-        ui->groceryIngredientsTable->setItem(row, 2, new QTableWidgetItem(ui->recipeIngredientTable->item(selectedRow, 2)->text()));
+    QItemSelectionModel *selectionModel = ui->recipeIngredientTable->selectionModel();
+    QModelIndexList selectedIndex = selectionModel->selectedRows();
+
+    if (!selectedIndex.isEmpty())
+    {
+        foreach (const QModelIndex &index, selectedIndex)
+        {
+            int row = ui->groceryIngredientsTable->rowCount();
+            ui->groceryIngredientsTable->insertRow(row);
+            ui->groceryIngredientsTable->setItem(row, 0, new QTableWidgetItem(ui->recipeIngredientTable->item(index.row(), 0)->text()));
+            ui->groceryIngredientsTable->setItem(row, 1, new QTableWidgetItem(ui->recipeIngredientTable->item(index.row(), 1)->text()));
+            ui->groceryIngredientsTable->setItem(row, 2, new QTableWidgetItem(ui->recipeIngredientTable->item(index.row(), 2)->text()));
+        }
+        statusBar()->showMessage("Ingredient saved to Grocery List", 2000);
+    }
+    else
+    {
+        statusBar()->showMessage("No Ingredient selected", 2000);
     }
 }
 
 
 void MainWindow::on_savedRecipeAddIngredientButton_clicked()
 {
-    int selectedRow = ui->savedRecipeIngredientTable->currentRow();
-    if (selectedRow != -1) {
-        int row = ui->groceryIngredientsTable->rowCount();
-        ui->groceryIngredientsTable->insertRow(row);
-        ui->groceryIngredientsTable->setItem(row, 0, new QTableWidgetItem(ui->savedRecipeIngredientTable->item(selectedRow, 0)->text()));
-        ui->groceryIngredientsTable->setItem(row, 1, new QTableWidgetItem(ui->savedRecipeIngredientTable->item(selectedRow, 1)->text()));
-        ui->groceryIngredientsTable->setItem(row, 2, new QTableWidgetItem(ui->savedRecipeIngredientTable->item(selectedRow, 2)->text()));
+    QItemSelectionModel *selectionModel = ui->savedRecipeIngredientTable->selectionModel();
+    QModelIndexList selectedIndex = selectionModel->selectedRows();
+
+    if (!selectedIndex.isEmpty())
+    {
+        foreach (const QModelIndex &index, selectedIndex)
+        {
+            int row = ui->groceryIngredientsTable->rowCount();
+            ui->groceryIngredientsTable->insertRow(row);
+            ui->groceryIngredientsTable->setItem(row, 0, new QTableWidgetItem(ui->savedRecipeIngredientTable->item(index.row(), 0)->text()));
+            ui->groceryIngredientsTable->setItem(row, 1, new QTableWidgetItem(ui->savedRecipeIngredientTable->item(index.row(), 1)->text()));
+            ui->groceryIngredientsTable->setItem(row, 2, new QTableWidgetItem(ui->savedRecipeIngredientTable->item(index.row(), 2)->text()));
+        }
+        statusBar()->showMessage("Ingredient saved to Grocery List", 2000);
+    }
+    else
+    {
+        statusBar()->showMessage("No Ingredient selected", 2000);
     }
 }
 

@@ -13,6 +13,33 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QDialog {
+	background: rgb(255, 255, 191);
+	color: rgb(32, 34, 25);
+}
+
+QTextEdit {
+	background: rgb(255, 255, 222);
+	border: 1px solid rgb(225, 176, 50);
+	color: rgb(32, 34, 25);
+}
+QTextEdit:selected {
+	border: 2px;
+}
+
+QPushButton {
+padding: 4px;
+	background-color: rgba(255, 234, 180, 250);
+	border-radius: 8px;
+}
+QPushButton:hover {
+    background-color: rgba(223, 208, 133, 250);
+}
+QPushButton:pressed {
+    background-color: rgba(184, 129, 34, 250);
+}</string>
+  </property>
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>

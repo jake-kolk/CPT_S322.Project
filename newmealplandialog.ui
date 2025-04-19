@@ -13,6 +13,39 @@
   <property name="windowTitle">
    <string>Create Meal Plan</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QDialog {
+	background: rgb(255, 255, 191);
+	color: rgb(32, 34, 25);
+}
+
+QLineEdit {
+	background: rgb(255, 255, 222);
+	color: rgb(32, 34, 25);
+border: 1px solid rgb(225, 176, 50);
+}
+QLineEdit:selected{
+border: 2px
+}
+
+QDateEdit {
+	background: rgb(255, 255, 222);
+	color: rgb(32, 34, 25);
+border: 1px solid rgb(225, 176, 50);
+}
+
+QPushButton {
+padding: 4px;
+	background-color: rgba(255, 234, 180, 250);
+	border-radius: 8px;
+}
+QPushButton:hover {
+    background-color: rgba(223, 208, 133, 250);
+}
+QPushButton:pressed {
+    background-color: rgba(184, 129, 34, 250);
+}</string>
+  </property>
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
