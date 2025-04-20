@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QDialogButtonBox" name="buttonBox">
+  <widget class="QDialogButtonBox" name="addToGroceryButton">
    <property name="geometry">
     <rect>
      <x>30</x>
@@ -102,7 +102,7 @@
  <resources/>
  <connections>
   <connection>
-   <sender>buttonBox</sender>
+   <sender>addToGroceryButton</sender>
    <signal>accepted()</signal>
    <receiver>addIngredient</receiver>
    <slot>accept()</slot>
@@ -118,7 +118,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>buttonBox</sender>
+   <sender>addToGroceryButton</sender>
    <signal>rejected()</signal>
    <receiver>addIngredient</receiver>
    <slot>reject()</slot>

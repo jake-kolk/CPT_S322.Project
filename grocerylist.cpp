@@ -52,10 +52,20 @@ void groceryList::addItem(recipe::recipeIngredientStruct* r)
 {
     this->ingredients->push_back(r);
 }
+
 void groceryList::removeItem(QString name)
 {
-
+    auto& items = *this->ingredients;
+    for (auto it = items.begin(); it != items.end(); ++it) {
+        if ((*it)->ingredient.compare(name, Qt::CaseInsensitive) == 0) {
+            delete *it;
+            items.erase(it);
+            break;
+        }
+    }
 }
+
+
 void groceryList::modifyItem(QString itemNameToBeModified, double newAmount)
 {
 
