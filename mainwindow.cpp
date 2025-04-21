@@ -891,16 +891,36 @@ void MainWindow::on_groceryIngredientsTable_cellChanged(int row, int column)
 
 }
 
-
 void MainWindow::on_addIngredientButton_clicked()
 {
     addIngredient dialog(this);
-    if (dialog.exec() == QDialog::Accepted) {
-        recipe::recipeIngredientStruct* ingredient = dialog.getIngredientStruct();
-        this->selectedGroceryList->addItem(ingredient);
+    connect(&dialog, &QDialog::accepted, this, [&]() {
+        auto ingredient = dialog.getIngredientStruct();
+        if (ingredient && selectedGroceryList) {
+            selectedGroceryList->addItem(ingredient);
+            updateGroceryListItems();
+        }
+    });
+
+    dialog.exec();
+}
+
+void MainWindow::on_removeIngredientButton_clicked()
+{
+    int row = ui->groceryIngredientsTable->currentRow();
+    if (row < 0 || !selectedGroceryList) {
+        QMessageBox::warning(this, "No Selection", "Please select a row to remove.");
+        return;
     }
+
+    QTableWidgetItem* nameItem = ui->groceryIngredientsTable->item(row, 2);
+    if (!nameItem) return;
+
+    QString name = nameItem->text();
+    selectedGroceryList->removeItem(name);
     updateGroceryListItems();
 }
+
 
 
 void MainWindow::on_recipeAddIngredientButton_clicked()
@@ -949,4 +969,5 @@ void MainWindow::on_savedRecipeAddIngredientButton_clicked()
         statusBar()->showMessage("No Ingredient selected", 2000);
     }
 }
+
 

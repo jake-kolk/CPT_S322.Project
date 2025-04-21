@@ -13,6 +13,7 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+
   <property name="styleSheet">
    <string notr="true">QDialog {
 	background: rgb(255, 255, 191);
@@ -40,7 +41,8 @@ QPushButton:pressed {
     background-color: rgba(184, 129, 34, 250);
 }</string>
   </property>
-  <widget class="QDialogButtonBox" name="buttonBox">
+  <widget class="QDialogButtonBox" name="addToGroceryButton">
+
    <property name="geometry">
     <rect>
      <x>30</x>
@@ -129,7 +131,7 @@ QPushButton:pressed {
  <resources/>
  <connections>
   <connection>
-   <sender>buttonBox</sender>
+   <sender>addToGroceryButton</sender>
    <signal>accepted()</signal>
    <receiver>addIngredient</receiver>
    <slot>accept()</slot>
@@ -145,7 +147,7 @@ QPushButton:pressed {
    </hints>
   </connection>
   <connection>
-   <sender>buttonBox</sender>
+   <sender>addToGroceryButton</sender>
    <signal>rejected()</signal>
    <receiver>addIngredient</receiver>
    <slot>reject()</slot>

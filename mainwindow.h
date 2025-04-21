@@ -128,9 +128,14 @@ private slots:
 
     void on_addIngredientButton_clicked();
 
+
     void on_recipeAddIngredientButton_clicked();
 
     void on_savedRecipeAddIngredientButton_clicked();
+
+    void on_removeIngredientButton_clicked();
+
+
 
 private:
     Ui::MainWindow *ui;

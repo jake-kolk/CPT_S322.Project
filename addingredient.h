@@ -3,6 +3,7 @@
 #include "recipe.h"
 #include <QDialog>
 #include <QMessageBox>
+#include <QPushButton>
 
 namespace Ui {
 class addIngredient;
@@ -16,6 +17,10 @@ public:
     explicit addIngredient(QWidget *parent = nullptr);
     ~addIngredient();
     recipe::recipeIngredientStruct* getIngredientStruct();
+
+
+signals:
+    void addIngredientToGrocery(recipe::recipeIngredientStruct* r);
 
 private:
     Ui::addIngredient *ui;
