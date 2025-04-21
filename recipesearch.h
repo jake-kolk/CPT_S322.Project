@@ -14,9 +14,11 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QUrlQuery>
+#include <QProgressBar>
 
 #include "recipe.h"
 #include "search.h"
+#include "mainwindow.h"
 
 class recipeSearch : public search
 {
@@ -28,13 +30,13 @@ public:
         QUrl recipeURL;
         QString recipeTitle;
     };
+
     explicit recipeSearch(QString key) : search(key)
     {
         this->ApiKey = key;
     };
     virtual ~recipeSearch(){}; // Virtual destructor
-    std::vector<recipe*>* makeRequest(QString cuisine, std::vector<QString> ingredients, QString diet, QString mealType, int numOfRecipes, QString query, QString sort="");
-
+    std::vector<recipe*>* makeRequest(QString cuisine, std::vector<QString> ingredients, QString diet, QString mealType, int numOfRecipes, QString query, QProgressBar* progressBar, QString sort="");
 };
 
 #endif // RECIPESEARCH_H
