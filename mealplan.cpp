@@ -26,7 +26,7 @@ void MealPlan::removeRecipe(QDate date, recipe* recipe){
     if(recipe == nullptr)return;
     for (auto it = (*this->mealPlan)[date.toString()].begin(); it != (*this->mealPlan)[date.toString()].end();) {
         if (*recipe == **it) {
-        delete *it;  // Free memory before erasing
+        //delete *it;  // Free memory before erasing
         it = (*this->mealPlan)[date.toString()].erase(it);  // Erase returns next valid iterator
         (*this->mealPlan)[date.toString()].shrink_to_fit();
         return;

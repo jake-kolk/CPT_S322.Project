@@ -3,7 +3,7 @@
 
 #include <QDialog>
 #include <recipe.h>
-
+#include <QMessageBox>
 namespace Ui {
 class NewMealPlanDialog;
 }
@@ -28,6 +28,14 @@ private slots:
 
 private:
     Ui::NewMealPlanDialog *ui;
+protected:
+    void accept() override {
+        if (this->name.isEmpty()) {
+            QMessageBox::warning(this, "Error", "You must enter a name!!");
+            return; // Don't close dialog
+        }
+        QDialog::accept(); // Accept and close
+    }
 
 };
 

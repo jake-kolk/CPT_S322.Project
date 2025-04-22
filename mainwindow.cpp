@@ -7,6 +7,7 @@
 #include "addingredient.h"
 #include <QMessageBox>
 #include <QTimer>
+#include <QFileDialog>
 #include "ScaledLabel.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -15,12 +16,14 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    //connect menu slot
+    connect(ui->actionExportRecipeTotxt, &QAction::triggered, this, &MainWindow::on_exportToTXT_clicked);
+
+
     qDebug() << "Loading json data...\n";
     //get saved recipes
     this->savedRecipes = new std::vector<recipe*>;
     this->groceryLists = std::vector<groceryList*>();
-    loadDataFromJson("data.json"); // QString("") means default location
-    addSavedRecipesToList();
 
     this->ui->searchRecipeInfoWidget->setVisible(false);
     this->ui->recipeURL->setVisible(false);
@@ -29,6 +32,16 @@ MainWindow::MainWindow(QWidget *parent)
     this->ui->savedRecipeURL->setVisible(false);
 
     this->ui->progressBar->setVisible(false); // hide progress bar unless it is active
+
+    loadDataFromJson("data.json"); // QString("") means default location
+    //set up saved recipes page
+    addSavedRecipesToList();
+    if(this->ui->savedRecipesList->count() > 0)
+    {
+        this->ui->savedRecipesList->setCurrentItem(this->ui->savedRecipesList->item(0));
+        on_savedRecipesList_itemClicked(this->ui->savedRecipesList->item(0));
+    }
+
 
     //set combox box option for search filters
     QStringList cuisines =     {"All Cuisines", "African", "Asian", "American", "British", "Cajun", "Caribbean", "Chinese", "Eastern European", "European",
@@ -48,11 +61,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     /*
     std::vector<recipe*>* results = searchEngine.makeRequest("", ingredients, "", "", 20, "", this->ui->progressBar, QString("popularity"));
-
     foundRecipes = results;
     this->ui->searchResultListLabel->setText("Popular With Users");
     if(this->foundRecipes->size() != 0) selectedRecipe = (*this->foundRecipes)[0];
-    updateSearchResultList();*/
+    updateSearchResultList();
+    */
 
     //if(this->ui->searchResult->count() > 0)on_searchResult_itemClicked(this->ui->searchResult->item(0));
 
@@ -66,14 +79,13 @@ MainWindow::MainWindow(QWidget *parent)
     updateMealPlanLists();
 
     //set up grocery lists
-
-    /*
-    this->groceryLists.push_back(new groceryList("listDawg"));
-    this->selectedGroceryList = this->groceryLists[0];
-    this->selectedGroceryList->addItem(3, "pounds", "grapes");
-    */
     updateGroceryListList();
     updateGroceryListItems();
+    //added next 3 lines to ensure that it stays set
+    this->ui->groceryIngredientsTable->setHorizontalHeaderItem(0, new QTableWidgetItem("Quantity"));
+    this->ui->groceryIngredientsTable->setHorizontalHeaderItem(1, new QTableWidgetItem("Unit"));
+    this->ui->groceryIngredientsTable->setHorizontalHeaderItem(2, new QTableWidgetItem("Ingredient"));
+
 }
 
 MainWindow::~MainWindow()
@@ -162,7 +174,7 @@ void MainWindow::updateGroceryListItems()
 {
 
     QTableWidgetItem* item;
-    this->ui->groceryIngredientsTable->clear();
+    this->ui->groceryIngredientsTable->clearContents();
     this->ui->groceryIngredientsTable->setRowCount(0);
     if(this->selectedGroceryList == nullptr)return;
     if(this->groceryLists.size() == 0)return;
@@ -183,10 +195,12 @@ void MainWindow::updateGroceryListItems()
         item->setData(Qt::UserRole, QVariant::fromValue(&(ingredient->ingredient)));
         this->ui->groceryIngredientsTable->setItem(lastRow, 2, item);
     }
+
 }
 
 void MainWindow::updateGroceryListList()
 {
+
     this->ui->grocerySelect->clear();
     for (groceryList* g : this->groceryLists)
     {
@@ -199,9 +213,11 @@ void MainWindow::updateGroceryListList()
         this->ui->grocerySelect->setCurrentIndex(0);
         this->selectedGroceryList = qvariant_cast<groceryList*>(this->ui->grocerySelect->currentData());
     }else this->selectedGroceryList = nullptr;
+
 }
 void MainWindow::on_removeGrocery_clicked()
 {
+    if(this->groceryLists.size() == 0) return;
     QVariant data = ui->grocerySelect->currentData();
     groceryList* deletedMealPlan = qvariant_cast<groceryList*>(data);
     auto it = std::find(this->groceryLists.begin(), this->groceryLists.end(), deletedMealPlan);
@@ -460,7 +476,7 @@ void MainWindow::loadDataFromJson(QString filepath)
 
 void MainWindow::saveDatatoJson()
 {
-    QJsonObject* recipeOBJ;
+    QJsonObject* recipeOBJ = nullptr;
     QJsonArray recipes;
     QJsonArray savedData;
     QJsonArray ingredients;
@@ -531,7 +547,7 @@ void MainWindow::saveDatatoJson()
     qDebug() << "JSON file saved successfully at:" << QFileInfo(file).absoluteFilePath();
     statusBar()->showMessage("JSON file saved successful", 2000);
 
-    delete recipeOBJ;
+    if(recipeOBJ != nullptr)delete recipeOBJ;
 }
 void MainWindow::addSavedRecipesToList()
 {
@@ -793,6 +809,7 @@ void MainWindow::updateMealPlanLists(){
 void MainWindow::on_mealPlanAddRecipeButton_clicked()
 {
     if(selectedRecipe == nullptr) return;
+    if(this->selectedMealPlan == nullptr) return;
     this->selectedMealPlan->addRecipe(this->ui->mealPlanCalender->selectedDate(), selectedRecipe);
     updateMealPlanLists();
 }
@@ -835,6 +852,7 @@ void MainWindow::on_mealPlanSelectedDayRecipesList_itemActivated(QListWidgetItem
 
 void MainWindow::on_mealPlanDeleteButton_clicked()
 {
+    if(this->mealPlans.size() == 0)return;
     QVariant data = ui->mealPlanSelect->currentData();
     MealPlan* deletedMealPlan = qvariant_cast<MealPlan*>(data);
     auto it = std::find(this->mealPlans.begin(), this->mealPlans.end(), deletedMealPlan);
@@ -925,19 +943,23 @@ void MainWindow::on_removeIngredientButton_clicked()
 
 void MainWindow::on_recipeAddIngredientButton_clicked()
 {
+    if(this->selectedGroceryList == nullptr)
+    {
+        statusBar()->showMessage("No Grocery List selected", 2000);
+        return;
+    }
     QItemSelectionModel *selectionModel = ui->recipeIngredientTable->selectionModel();
     QModelIndexList selectedIndex = selectionModel->selectedRows();
+    if(!selectedIndex.isEmpty()){
+        int row = this->ui->recipeIngredientTable->currentRow();
 
-    if (!selectedIndex.isEmpty())
-    {
-        foreach (const QModelIndex &index, selectedIndex)
-        {
-            int row = ui->groceryIngredientsTable->rowCount();
-            ui->groceryIngredientsTable->insertRow(row);
-            ui->groceryIngredientsTable->setItem(row, 0, new QTableWidgetItem(ui->recipeIngredientTable->item(index.row(), 0)->text()));
-            ui->groceryIngredientsTable->setItem(row, 1, new QTableWidgetItem(ui->recipeIngredientTable->item(index.row(), 1)->text()));
-            ui->groceryIngredientsTable->setItem(row, 2, new QTableWidgetItem(ui->recipeIngredientTable->item(index.row(), 2)->text()));
-        }
+        recipe::recipeIngredientStruct* s = new recipe::recipeIngredientStruct;
+        s->amount = ui->recipeIngredientTable->item(row, 0)->text().toDouble();
+        s->units = ui->recipeIngredientTable->item(row, 1)->text();
+        s->ingredient = ui->recipeIngredientTable->item(row, 2)->text();
+
+        this->selectedGroceryList->ingredients->push_back(s);
+        updateGroceryListItems();
         statusBar()->showMessage("Ingredient saved to Grocery List", 2000);
     }
     else
@@ -949,19 +971,23 @@ void MainWindow::on_recipeAddIngredientButton_clicked()
 
 void MainWindow::on_savedRecipeAddIngredientButton_clicked()
 {
+    if(this->selectedGroceryList == nullptr)
+    {
+        statusBar()->showMessage("No Grocery List selected", 2000);
+        return;
+    }
     QItemSelectionModel *selectionModel = ui->savedRecipeIngredientTable->selectionModel();
     QModelIndexList selectedIndex = selectionModel->selectedRows();
+    if(!selectedIndex.isEmpty()){
+        int row = this->ui->recipeIngredientTable->currentRow();
 
-    if (!selectedIndex.isEmpty())
-    {
-        foreach (const QModelIndex &index, selectedIndex)
-        {
-            int row = ui->groceryIngredientsTable->rowCount();
-            ui->groceryIngredientsTable->insertRow(row);
-            ui->groceryIngredientsTable->setItem(row, 0, new QTableWidgetItem(ui->savedRecipeIngredientTable->item(index.row(), 0)->text()));
-            ui->groceryIngredientsTable->setItem(row, 1, new QTableWidgetItem(ui->savedRecipeIngredientTable->item(index.row(), 1)->text()));
-            ui->groceryIngredientsTable->setItem(row, 2, new QTableWidgetItem(ui->savedRecipeIngredientTable->item(index.row(), 2)->text()));
-        }
+        recipe::recipeIngredientStruct* s = new recipe::recipeIngredientStruct;
+        s->amount = ui->recipeIngredientTable->item(row, 0)->text().toDouble();
+        s->units = ui->recipeIngredientTable->item(row, 1)->text();
+        s->ingredient = ui->recipeIngredientTable->item(row, 2)->text();
+
+        this->selectedGroceryList->ingredients->push_back(s);
+        updateGroceryListItems();
         statusBar()->showMessage("Ingredient saved to Grocery List", 2000);
     }
     else
@@ -971,3 +997,35 @@ void MainWindow::on_savedRecipeAddIngredientButton_clicked()
 }
 
 
+/*
+void MainWindow::on_removeIngredientButton_clicked()
+{
+    int deletedRow = this->ui->groceryIngredientsTable->currentRow();
+    this->ui->groceryIngredientsTable->removeRow(deletedRow);
+    this->selectedGroceryList->ingredients->erase(this->selectedGroceryList->ingredients->begin() + deletedRow);
+    this->ui->groceryIngredientsTable->selectRow(deletedRow - 1);
+}
+*/
+
+void MainWindow::on_exportToTXT_clicked()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, "Select save file location", "Grocery List.txt", "Text Files (*.txt);;All Files (*)");
+
+    if (fileName.isEmpty())
+        return;
+
+    QFile file(fileName);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QTextStream out(&file);
+        if(this->selectedGroceryList != nullptr){
+            for(auto ingredients : *this->selectedGroceryList->ingredients)
+            {
+                out << ingredients->amount  << " " << ingredients->units << " " << ingredients->ingredient << '\n';
+            }
+        }
+        file.close();
+        QMessageBox::information(this, "Success", "File saved successfully!");
+    } else {
+        QMessageBox::critical(this, "Error", "Failed to save file.");
+    }
+}

@@ -15,6 +15,7 @@
 #include <QJsonObject>
 #include <QUrlQuery>
 #include <QProgressBar>
+#include <QTimer>
 
 #include "recipe.h"
 #include "search.h"

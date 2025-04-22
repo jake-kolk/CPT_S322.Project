@@ -1010,7 +1010,7 @@ QProgressBar:chunk {
     <item row="1" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="search">
        <property name="sizePolicy">
@@ -1548,8 +1548,8 @@ QProgressBar:chunk {
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>390</width>
-                   <height>326</height>
+                   <width>396</width>
+                   <height>323</height>
                   </rect>
                  </property>
                  <property name="sizePolicy">
@@ -1891,8 +1891,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>391</width>
-                   <height>326</height>
+                   <width>411</width>
+                   <height>323</height>
                   </rect>
                  </property>
                  <property name="sizePolicy">
@@ -2733,7 +2733,7 @@ stop:0 rgba(184, 129, 34, 150));
   </action>
   <action name="actionExportRecipeTotxt">
    <property name="text">
-    <string>Export Recipe to txt</string>
+    <string>Export Grocery to txt</string>
    </property>
   </action>
  </widget>

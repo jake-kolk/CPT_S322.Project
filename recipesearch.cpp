@@ -56,6 +56,19 @@ std::vector<recipe*>* recipeSearch::makeRequest(QString cuisine, std::vector<QSt
     connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
     loop.exec();  // Blocks execution until the request is complete
 
+    //added in case there is no response
+    QTimer *timer = new QTimer(this);
+    timer->setSingleShot(true);
+    timer->start(7000); // Timeout in (7 seconds)
+
+    connect(timer, &QTimer::timeout, this, [=]() {
+        if (reply->isRunning()) {
+            reply->abort();  // Cancel the request
+            qDebug() << "Request timed out.";
+            return nullptr;
+        }
+    });
+
     progressBar->setValue(90);
 
     qDebug() << "Recipe search request received...";
