@@ -36,6 +36,8 @@ MainWindow::MainWindow(QWidget *parent)
     loadDataFromJson("data.json"); // QString("") means default location
     //set up saved recipes page
     addSavedRecipesToList();
+    this->ui->savedRecipeIngredientTable->setColumnWidth(1, 60); // Column 1 to 200 pixels, etc.
+
     if(this->ui->savedRecipesList->count() > 0)
     {
         this->ui->savedRecipesList->setCurrentItem(this->ui->savedRecipesList->item(0));
@@ -58,16 +60,14 @@ MainWindow::MainWindow(QWidget *parent)
     //set up search page to display popular recipes on start up
     recipeSearch searchEngine(this->APIKEY);
     std::vector<QString> ingredients = {};
+    this->ui->recipeIngredientTable->setColumnWidth(1, 60); // Column 1 to 200 pixels, etc.
 
-    /*
     std::vector<recipe*>* results = searchEngine.makeRequest("", ingredients, "", "", 20, "", this->ui->progressBar, QString("popularity"));
     foundRecipes = results;
     this->ui->searchResultListLabel->setText("Popular With Users");
     if(this->foundRecipes->size() != 0) selectedRecipe = (*this->foundRecipes)[0];
     updateSearchResultList();
-    */
-
-    //if(this->ui->searchResult->count() > 0)on_searchResult_itemClicked(this->ui->searchResult->item(0));
+    if(this->ui->searchResult->count() > 0)on_searchResult_itemClicked(this->ui->searchResult->item(0));
 
     //set up meal plan + meal plan combo box
     if(this->mealPlans.size() == 0)
@@ -603,32 +603,42 @@ void MainWindow::on_savedRecipesList_itemClicked(QListWidgetItem *item)
         QNetworkAccessManager *manager = new QNetworkAccessManager(this);
 
         QUrl imageUrl(selectedRecipe->imageURL.toString());
+        if(imageUrl.isEmpty())
+        {
+            this->ui->savedRecipeImage->hide();
+            this->ui->savedRecipeImage->setVisible(false);
+        }
+        else{
+            QNetworkReply *reply = manager->get(QNetworkRequest(imageUrl));
+             connect(reply, &QNetworkReply::finished, [=]() {
+                 if (reply->error() == QNetworkReply::NoError) {
+                    QPixmap pixmap;
+                    pixmap.loadFromData(reply->readAll());
+                    QPixmap scaledPixmap = pixmap.scaledToWidth(395, Qt::SmoothTransformation);
+                    ui->savedRecipeImage->setPixmap(scaledPixmap);
+                    this->ui->savedRecipeImage->show();
+                     this->ui->savedRecipeImage->setVisible(true);
+                 } else {
+                     qDebug() << "Failed to load image:" << reply->errorString();
+                     this->ui->savedRecipeImage->hide();
+                     this->ui->savedRecipeImage->setVisible(false);
 
-        QNetworkReply *reply = manager->get(QNetworkRequest(imageUrl));
-         connect(reply, &QNetworkReply::finished, [=]() {
-             if (reply->error() == QNetworkReply::NoError) {
-                QPixmap pixmap;
-                pixmap.loadFromData(reply->readAll());
-                QPixmap scaledPixmap = pixmap.scaledToWidth(395, Qt::SmoothTransformation);
-                ui->savedRecipeImage->setPixmap(scaledPixmap);
-             } else {
-                 qDebug() << "Failed to load image:" << reply->errorString();
-                 statusBar()->showMessage("Failed to load image", 2000);
-             }
-             reply->deleteLater();
-         });
+                     statusBar()->showMessage("Failed to load image", 2000);
+                 }
+                 reply->deleteLater();
+             });
+        }
 
-        ui->savedRecipeIngredientTable->setRowCount(0); //reset table
+        ui->savedRecipeIngredientTable->setRowCount(0);
         for (auto* ingredient : *(selectedRecipe->ingredients)) {
-            int row = ui->savedRecipeIngredientTable->rowCount();
-            ui->recipeIngredientTable->insertRow(row);
 
+            int row = ui->savedRecipeIngredientTable->rowCount();
+            ui->savedRecipeIngredientTable->insertRow(row);
 
             ui->savedRecipeIngredientTable->setItem(row, 0, new QTableWidgetItem(QString::number(ingredient->amount)));
             ui->savedRecipeIngredientTable->setItem(row, 1, new QTableWidgetItem(ingredient->units));
             ui->savedRecipeIngredientTable->setItem(row, 2, new QTableWidgetItem(ingredient->ingredient));
         }
-
     }
 
 }
@@ -712,7 +722,7 @@ void MainWindow::on_savedRecipeName_textChanged(const QString &arg1)
 {
     this->selectedRecipe->title = arg1;
     //find selected recipe in list and change it
-    this->ui->savedRecipesList->selectedItems()[0]->setText(arg1);
+    if(!this->ui->savedRecipesList->selectedItems().isEmpty()) this->ui->savedRecipesList->selectedItems()[0]->setText(arg1);
 }
 
 
@@ -1029,3 +1039,22 @@ void MainWindow::on_exportToTXT_clicked()
         QMessageBox::critical(this, "Error", "Failed to save file.");
     }
 }
+
+void MainWindow::on_createNewRecipeButton_clicked()
+{
+    std::vector<recipe::recipeIngredientStruct*>* newIngVect = new std::vector<recipe::recipeIngredientStruct*>;
+    recipe* newRecipe = new recipe(00000, QUrl(), "Enter your title here!", newIngVect,
+                                   0, 0, QUrl(), "Enter your description here!");
+    this->savedRecipes->push_back(newRecipe);
+    //this->selectedRecipe = newRecipe;
+    addSavedRecipesToList();
+    on_savedRecipesList_itemClicked(this->ui->savedRecipesList->item(this->ui->savedRecipesList->count() - 1));
+    int rowToSelect = this->ui->savedRecipesList->count() - 1; // for example, the third item
+    QListWidgetItem* item = this->ui->savedRecipesList->item(rowToSelect);
+
+    if (item) {
+        this->ui->savedRecipesList->setCurrentItem(item);
+        item->setSelected(true);  // optional, if you want it highlighted
+    }
+}
+

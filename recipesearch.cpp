@@ -155,6 +155,7 @@ std::vector<recipe*>* recipeSearch::handleResponse(QNetworkReply* reply) {
                     is = new recipe::recipeIngredientStruct;
 
                     QString name = ingredientObj["name"].toString();
+                    QString unit = ingredientObj["unit"].toString();
                     if(name.mid(0,3) == "tsp")// API has error in their DB, tsp is included in name, this fixes it
                     {
                         unit = name.mid(0,3);
@@ -167,6 +168,15 @@ std::vector<recipe*>* recipeSearch::handleResponse(QNetworkReply* reply) {
                         name.remove(0,3);
                         is->ingredient = name;
                         is->units = unit;
+                    }else if (unit.toLower() == "teaspoon" || unit.toLower() == "teaspoons")
+                    {
+                        is->ingredient = name;
+                        is->units = "tsp";
+                    }
+                    else if (unit.toLower() == "tablespoon" || unit.toLower() == "tablespoons")
+                    {
+                        is->ingredient = name;
+                        is->units = "tbsp";
                     }
                     else{
                         is->ingredient = name;

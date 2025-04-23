@@ -136,6 +136,8 @@ private slots:
 
     void on_exportToTXT_clicked();
 
+    void on_createNewRecipeButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     recipe* selectedRecipe = nullptr;
