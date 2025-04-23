@@ -1,5 +1,5 @@
 #include "recipesearch.h"
-
+#include "QMessageBox"
 std::vector<recipe*>* recipeSearch::makeRequest(QString cuisine, std::vector<QString> ingredients, QString diet, QString mealType, int NumRecipes, QString searchQuery, QProgressBar *progressBar, QString sort) {
     QUrl url("https://api.spoonacular.com/recipes/complexSearch");
     //https://api.spoonacular.com/recipes/complexSearch
@@ -65,6 +65,7 @@ std::vector<recipe*>* recipeSearch::makeRequest(QString cuisine, std::vector<QSt
         if (reply->isRunning()) {
             reply->abort();  // Cancel the request
             qDebug() << "Request timed out.";
+            QMessageBox::information(nullptr, "Error", "Search request timed out!");
             return nullptr;
         }
     });
@@ -92,6 +93,7 @@ std::vector<recipe*>* recipeSearch::handleResponse(QNetworkReply* reply) {
     }
 
     if (reply->error() != QNetworkReply::NoError) {
+        QMessageBox::information(nullptr, "Error", reply->errorString());
         qDebug() << "Error: " << reply->errorString();
         return recipes;
     }
@@ -102,6 +104,7 @@ std::vector<recipe*>* recipeSearch::handleResponse(QNetworkReply* reply) {
     QJsonDocument jsonResponse = QJsonDocument::fromJson(responseData);
     if (jsonResponse.isNull() || !jsonResponse.isObject()) {
         qDebug() << "Invalid JSON response!";
+        QMessageBox::information(nullptr,  "Error", "Invalid esponse!");
         return recipes;
     }
 

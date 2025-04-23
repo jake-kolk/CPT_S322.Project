@@ -26,6 +26,8 @@ public:
 private slots:
     void on_buttonBox_accepted();
 
+    void on_lineEdit_textChanged(const QString &arg1);
+
 private:
     Ui::NewMealPlanDialog *ui;
 protected:

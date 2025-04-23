@@ -1,11 +1,13 @@
 #include "newmealplandialog.h"
 #include "ui_newmealplandialog.h"
+#include <QPushButton>
 
-NewMealPlanDialog::NewMealPlanDialog(QWidget *parent)//mode = 0 for user mode = 1 for system
+NewMealPlanDialog::NewMealPlanDialog(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::NewMealPlanDialog)
 {
     ui->setupUi(this);
+
 }
 
 NewMealPlanDialog::~NewMealPlanDialog()
@@ -21,5 +23,11 @@ QString NewMealPlanDialog::getName() const
 void NewMealPlanDialog::on_buttonBox_accepted()
 {
     this->name = this->ui->lineEdit->text();
+}
+
+
+void NewMealPlanDialog::on_lineEdit_textChanged(const QString &arg1)
+{
+    this->name = arg1;
 }
 

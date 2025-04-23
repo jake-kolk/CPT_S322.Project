@@ -12,13 +12,7 @@ public:
 
     QString getName() const;
     void setName(const QString &name);
-    /*
-    QDate getStartDate() const;
-    void setStartDate(const QDate &startDate);
 
-    QDate getEndDate() const;
-    void setEndDate(const QDate &endDate);
-    */
     std::unordered_map<QString,std::vector<recipe*>>* mealPlan;
     recipe* getRecipesAt(QDate date);
     void addRecipe(QDate date, recipe* r);
