@@ -38,6 +38,9 @@ MainWindow::MainWindow(QWidget *parent)
     addSavedRecipesToList();
     this->ui->savedRecipeIngredientTable->setColumnWidth(1, 60); // Column 1 to 200 pixels, etc.
 
+    ui->recipeIngredientTable->setEditTriggers(QAbstractItemView::AllEditTriggers);
+    ui->savedRecipeIngredientTable->setEditTriggers(QAbstractItemView::AllEditTriggers);
+
     if(this->ui->savedRecipesList->count() > 0)
     {
         this->ui->savedRecipesList->setCurrentItem(this->ui->savedRecipesList->item(0));
@@ -761,12 +764,19 @@ void MainWindow::on_savedRecipeIngredientTable_cellChanged(int row, int column)
 
 void MainWindow::on_savedRecipeIngredientTable_itemChanged(QTableWidgetItem *item)
 {
-    /*
-    int row = this->ui->savedRecipeIngredientTable->row(item);  // Get the row
-    int column =  this->ui->savedRecipeIngredientTable->column(item);  // Get the column
-    std::vector<recipe::recipeIngredientStruct*>* selectedRecipeIngredientStruct = selectedRecipe->ingredients;
-    (*selectedRecipeIngredientStruct)[row]->ingredient = this->ui->recipeIngredientTable->item(row, column)->text();
-*/
+    if (!selectedRecipe || !selectedRecipe->ingredients) return;
+
+    int row = item->row();
+    int col = item->column();
+    if (row >= selectedRecipe->ingredients->size()) return;
+
+    auto& ingredient = (*selectedRecipe->ingredients)[row];
+
+    switch (col) {
+    case 0: ingredient->amount = item->text().toDouble(); break;
+    case 1: ingredient->units = item->text(); break;
+    case 2: ingredient->ingredient = item->text(); break;
+    }
 }
 
 
@@ -1055,6 +1065,30 @@ void MainWindow::on_createNewRecipeButton_clicked()
     if (item) {
         this->ui->savedRecipesList->setCurrentItem(item);
         item->setSelected(true);  // optional, if you want it highlighted
+    }
+}
+
+
+void MainWindow::on_recipeIngredientTable_itemChanged(QTableWidgetItem *item) {
+    if (!selectedRecipe || !selectedRecipe->ingredients) return;
+
+    int row = item->row();
+    int col = item->column();
+
+    if (row >= selectedRecipe->ingredients->size()) return;
+
+    auto& ingredient = (*selectedRecipe->ingredients)[row];
+
+    switch (col) {
+    case 0: // Quantity
+        ingredient->amount = item->text().toDouble();
+        break;
+    case 1: // Unit
+        ingredient->units = item->text();
+        break;
+    case 2: // Ingredient name
+        ingredient->ingredient = item->text();
+        break;
     }
 }
 

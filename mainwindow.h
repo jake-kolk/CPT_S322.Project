@@ -138,6 +138,8 @@ private slots:
 
     void on_createNewRecipeButton_clicked();
 
+    void on_recipeIngredientTable_itemChanged(QTableWidgetItem *item);
+
 private:
     Ui::MainWindow *ui;
     recipe* selectedRecipe = nullptr;
