@@ -19,7 +19,6 @@ MainWindow::MainWindow(QWidget *parent)
     //connect menu slot
     connect(ui->actionExportRecipeTotxt, &QAction::triggered, this, &MainWindow::on_exportToTXT_clicked);
 
-
     qDebug() << "Loading json data...\n";
     //get saved recipes
     this->savedRecipes = new std::vector<recipe*>;
@@ -811,6 +810,22 @@ void MainWindow::on_savedRecipeIngredientTable_itemChanged(QTableWidgetItem *ite
 void MainWindow::on_tabWidget_currentChanged(int index)
 {
     this->selectedRecipe = nullptr;
+    if(index == 0){
+       QList<QListWidgetItem*> selected =  this->ui->searchResult->selectedItems();
+       if(selected.count() > 0)
+        {
+            QVariant v = selected[0]->data(Qt::UserRole);
+           this->selectedRecipe = v.value<recipe*>();
+        }else return;
+    }
+    if(index == 1){
+        QList<QListWidgetItem*> selected =  this->ui->savedRecipesList->selectedItems();
+        if(selected.count() > 0)
+        {
+            QVariant v = selected[0]->data(Qt::UserRole);
+            this->selectedRecipe = v.value<recipe*>();
+        }else return;
+    }
 }
 
 
