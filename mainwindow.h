@@ -128,6 +128,7 @@ private slots:
 
     void on_addIngredientButton_clicked();
 
+
     void on_recipeAddIngredientButton_clicked();
 
     void on_savedRecipeAddIngredientButton_clicked();
@@ -139,6 +140,9 @@ private slots:
     void on_createNewRecipeButton_clicked();
 
     void on_recipeIngredientTable_itemChanged(QTableWidgetItem *item);
+
+
+
 
 private:
     Ui::MainWindow *ui;

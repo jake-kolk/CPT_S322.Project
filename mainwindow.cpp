@@ -25,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
     this->savedRecipes = new std::vector<recipe*>;
     this->groceryLists = std::vector<groceryList*>();
 
+
     this->ui->searchRecipeInfoWidget->setVisible(false);
     this->ui->recipeURL->setVisible(false);
 
@@ -47,6 +48,15 @@ MainWindow::MainWindow(QWidget *parent)
         on_savedRecipesList_itemClicked(this->ui->savedRecipesList->item(0));
     }
 
+
+    //loadDataFromJson("data.json"); // QString("") means default location
+    //set up saved recipes page
+    addSavedRecipesToList();
+    if(this->ui->savedRecipesList->count() > 0)
+    {
+        this->ui->savedRecipesList->setCurrentItem(this->ui->savedRecipesList->item(0));
+        on_savedRecipesList_itemClicked(this->ui->savedRecipesList->item(0));
+    }
 
     //set combox box option for search filters
     QStringList cuisines =     {"All Cuisines", "African", "Asian", "American", "British", "Cajun", "Caribbean", "Chinese", "Eastern European", "European",
@@ -633,15 +643,17 @@ void MainWindow::on_savedRecipesList_itemClicked(QListWidgetItem *item)
         }
 
         ui->savedRecipeIngredientTable->setRowCount(0);
+        int row = ui->savedRecipeIngredientTable->rowCount();
         for (auto* ingredient : *(selectedRecipe->ingredients)) {
 
-            int row = ui->savedRecipeIngredientTable->rowCount();
             ui->savedRecipeIngredientTable->insertRow(row);
 
             ui->savedRecipeIngredientTable->setItem(row, 0, new QTableWidgetItem(QString::number(ingredient->amount)));
             ui->savedRecipeIngredientTable->setItem(row, 1, new QTableWidgetItem(ingredient->units));
             ui->savedRecipeIngredientTable->setItem(row, 2, new QTableWidgetItem(ingredient->ingredient));
         }
+        int newRow = this->ui->savedRecipeIngredientTable->rowCount();  // Gets current number of rows
+        this->ui->savedRecipeIngredientTable->insertRow(newRow);
     }
 
 }
@@ -712,12 +724,23 @@ void MainWindow::on_deleteSavedRecipesButton_clicked()
                 this->savedRecipes->shrink_to_fit();
                 addSavedRecipesToList();//to update list
                 statusBar()->showMessage("Removed Recipe", 2000);
+                if (this->savedRecipes->size() > 0){//this is to select a recipe after selected recie is deleted
+                    int lastIndex = this->ui->savedRecipesList->count() - 1;
+                    if (lastIndex >= 0) {
+                        QListWidgetItem* lastItem = this->ui->savedRecipesList->item(lastIndex);
+                        lastItem->setSelected(true);
+                        this->ui->savedRecipesList->setCurrentItem(lastItem);
+                        this->ui->savedRecipesList->setFocus();
+                    }
+                }
                 return;
             } else {
                 ++it;
             }
         }
     }
+
+
 }
 
 
@@ -776,6 +799,11 @@ void MainWindow::on_savedRecipeIngredientTable_itemChanged(QTableWidgetItem *ite
     case 0: ingredient->amount = item->text().toDouble(); break;
     case 1: ingredient->units = item->text(); break;
     case 2: ingredient->ingredient = item->text(); break;
+    }
+    if(row == this->ui->recipeIngredientTable->rowCount() - 1)
+    {
+        int newRow = this->ui->savedRecipeIngredientTable->rowCount();  // Gets current number of rows
+        this->ui->savedRecipeIngredientTable->insertRow(newRow);
     }
 }
 
@@ -961,6 +989,7 @@ void MainWindow::on_removeIngredientButton_clicked()
 
 
 
+
 void MainWindow::on_recipeAddIngredientButton_clicked()
 {
     if(this->selectedGroceryList == nullptr)
@@ -999,6 +1028,31 @@ void MainWindow::on_savedRecipeAddIngredientButton_clicked()
     QItemSelectionModel *selectionModel = ui->savedRecipeIngredientTable->selectionModel();
     QModelIndexList selectedIndex = selectionModel->selectedRows();
     if(!selectedIndex.isEmpty()){
+        int row = this->ui->savedRecipeIngredientTable->currentRow();
+
+        recipe::recipeIngredientStruct* s = new recipe::recipeIngredientStruct;
+        s->amount = ui->savedRecipeIngredientTable->item(row, 0)->text().toDouble();
+        s->units = ui->savedRecipeIngredientTable->item(row, 1)->text();
+        s->ingredient = ui->savedRecipeIngredientTable->item(row, 2)->text();
+
+        this->selectedGroceryList->ingredients->push_back(s);
+        updateGroceryListItems();
+        statusBar()->showMessage("Ingredient saved to Grocery List", 2000);
+    }
+    else
+    {
+        statusBar()->showMessage("No Ingredient selected", 2000);
+    }
+
+    /*
+        if(this->selectedGroceryList == nullptr)
+    {
+        statusBar()->showMessage("No Grocery List selected", 2000);
+        return;
+    }
+    QItemSelectionModel *selectionModel = ui->recipeIngredientTable->selectionModel();
+    QModelIndexList selectedIndex = selectionModel->selectedRows();
+    if(!selectedIndex.isEmpty()){
         int row = this->ui->recipeIngredientTable->currentRow();
 
         recipe::recipeIngredientStruct* s = new recipe::recipeIngredientStruct;
@@ -1014,10 +1068,13 @@ void MainWindow::on_savedRecipeAddIngredientButton_clicked()
     {
         statusBar()->showMessage("No Ingredient selected", 2000);
     }
+    */
 }
 
 
 /*
+=======
+>>>>>>> Stashed changes
 void MainWindow::on_removeIngredientButton_clicked()
 {
     int deletedRow = this->ui->groceryIngredientsTable->currentRow();
@@ -1025,6 +1082,7 @@ void MainWindow::on_removeIngredientButton_clicked()
     this->selectedGroceryList->ingredients->erase(this->selectedGroceryList->ingredients->begin() + deletedRow);
     this->ui->groceryIngredientsTable->selectRow(deletedRow - 1);
 }
+<<<<<<< Updated upstream
 */
 
 void MainWindow::on_exportToTXT_clicked()
@@ -1091,4 +1149,5 @@ void MainWindow::on_recipeIngredientTable_itemChanged(QTableWidgetItem *item) {
         break;
     }
 }
+
 
